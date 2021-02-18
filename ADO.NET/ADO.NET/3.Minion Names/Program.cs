@@ -32,13 +32,16 @@ namespace _3.Minion_Names
 
                 var minions = GetMinions(minionsQuery, connection, id);
 
-
                 if (name != null)
                 {
-                    Console.WriteLine(name);
-                    if (minions != null)
+                    Console.WriteLine($"Villian: {name}"); 
+                    if (minions != null && minions != string.Empty )
                     {
                         Console.WriteLine(minions);
+                    }
+                    else
+                    {
+                        Console.WriteLine("(no minions)");
                     }
                 }
                 else

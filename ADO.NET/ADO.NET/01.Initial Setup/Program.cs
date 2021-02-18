@@ -38,23 +38,17 @@ namespace _01.Initial_Setup
         {
             string[] insertMinion = new string[]
                 {
-                "CREATE TABLE Countries " +
-                "(Id INT PRIMARY KEY IDENTITY,Name VARCHAR(50))",
+                "CREATE TABLE Countries (Id INT PRIMARY KEY IDENTITY,Name VARCHAR(50))",
 
-                "CREATE TABLE Towns" +
-                "(Id INT PRIMARY KEY IDENTITY,Name VARCHAR(50), CountryCode INT REFERENCES Countries(Id))",
+                "CREATE TABLE Towns (Id INT PRIMARY KEY IDENTITY,Name VARCHAR(50), CountryCode INT REFERENCES Countries(Id))",
 
-                "CREATE TABLE Minions" +
-                "(Id INT PRIMARY KEY IDENTITY,Name VARCHAR(30), Age INT, TownId INT REFERENCES Towns(Id))",
+                "CREATE TABLE Minions (Id INT PRIMARY KEY IDENTITY,Name VARCHAR(30), Age INT, TownId INT REFERENCES Towns(Id))",
 
-                "CREATE TABLE EvilnessFactors" +
-                "(Id INT PRIMARY KEY IDENTITY, Name VARCHAR(50))",
+                "CREATE TABLE EvilnessFactors (Id INT PRIMARY KEY IDENTITY, Name VARCHAR(50))",
 
-                "CREATE TABLE Villains " +
-                "(Id INT PRIMARY KEY IDENTITY, Name VARCHAR(50), EvilnessFactorId INT REFERENCES EvilnessFactors(Id))",
+                "CREATE TABLE Villains (Id INT PRIMARY KEY IDENTITY, Name VARCHAR(50), EvilnessFactorId INT REFERENCES EvilnessFactors(Id))",
 
-                "CREATE TABLE MinionsVillains " +
-                "(MinionId INT REFERENCES Minions(Id),VillainId INT REFERENCES Villains(Id),PRIMARY KEY(MinionId, VillainId))"
+                "CREATE TABLE MinionsVillains (MinionId INT REFERENCES Minions(Id),VillainId INT REFERENCES Villains(Id),PRIMARY KEY(MinionId, VillainId))"
           };
 
             return insertMinion;

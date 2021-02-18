@@ -6,19 +6,22 @@ namespace _01.Initial_Setup
 {
     class Program
     {
-        private const string masterDb = "Server=.\\SQLEXPRESS;Integrated Security=true; DataBase=master";
-        private const string minionsDb = "Server=.\\SQLEXPRESS;Integrated Security=true; DataBase=MinionsDB";
+        private const string Master_DB = "Server=.\\SQLEXPRESS;Integrated Security=true; DataBase=master";
+        private const string MinionsDB = "Server=.\\SQLEXPRESS;Integrated Security=true; DataBase=MinionsDB";
+        private const string Create_Tables = "CREATE DATABASE MinionsDB";
+
+
         static void Main(string[] args)
         {
 
-            using (SqlConnection connection = new SqlConnection(masterDb))
+            using (SqlConnection connection = new SqlConnection(Master_DB))
             {
                 connection.Open();
-                SqlCommand createDbMinions = new SqlCommand("CREATE DATABASE MinionsDB", connection);
+                SqlCommand createDbMinions = new SqlCommand(Create_Tables, connection);
                 createDbMinions.ExecuteNonQuery();
             }
 
-            using (SqlConnection connectToMinionDb = new SqlConnection(minionsDb))
+            using (SqlConnection connectToMinionDb = new SqlConnection(MinionsDB))
             {
                 connectToMinionDb.Open();
 

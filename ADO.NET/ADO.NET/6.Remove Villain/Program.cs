@@ -30,14 +30,14 @@ namespace _6.Remove_Villain
                 using SqlCommand deleteMinions = new SqlCommand(deleteMinionsCmd, sqlConnection);
 
                 deleteMinions.Parameters.AddWithValue("@villainId", villainId);
-                deleteMinions.ExecuteNonQuery();
+                int affectedRow = deleteMinions.ExecuteNonQuery();
 
                 string deleteVillainCmd = @"DELETE FROM Villains WHERE Id = @villainId";
                 using SqlCommand deleteVillain = new SqlCommand(deleteVillainCmd, sqlConnection);
 
                 deleteVillain.Parameters.AddWithValue("@villainId", villainId);
 
-                int affectedRow = deleteVillain.ExecuteNonQuery();
+               deleteVillain.ExecuteNonQuery();
 
                 Console.WriteLine($"{villainName} was deleted.");
                 Console.WriteLine($"{affectedRow} minions were released.");

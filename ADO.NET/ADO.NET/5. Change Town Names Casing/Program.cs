@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace _5._Change_Town_Names_Casing
 {
-    class Program
+    class StartUp
     {
         private const string ConnectionString = @"Server=.\SQLEXPRESS;Database=MinionsDB;Integrated Security=true;";
         static void Main(string[] args)

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace _4._Add_Minion
 {
-    class Program
+    class StartUp
     {
         private const string MinionsDB = @"Server=.\SQLEXPRESS;Integrated Security=true; DataBase=MinionsDB";
 

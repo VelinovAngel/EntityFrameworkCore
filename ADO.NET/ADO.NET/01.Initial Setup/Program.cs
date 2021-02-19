@@ -4,7 +4,7 @@ using Microsoft.Data.SqlClient;
 
 namespace _01.Initial_Setup
 {
-    class Program
+    class StartUp
     {
         private const string Master_DB = "Server=.\\SQLEXPRESS;Integrated Security=true; DataBase=master";
         private const string MinionsDB = "Server=.\\SQLEXPRESS;Integrated Security=true; DataBase=MinionsDB";

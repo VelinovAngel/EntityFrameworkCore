@@ -71,7 +71,6 @@ namespace _3.Minion_Names
                 }
             }
         }
-
         private static object GetNameById(string villianNameQuesry, SqlConnection connection, int villainId)
         {
             using (SqlCommand command = new SqlCommand(villianNameQuesry, connection))

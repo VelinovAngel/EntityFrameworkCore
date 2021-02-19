@@ -5,19 +5,19 @@ VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01.Initial Setup", "01.Initial Setup\01.Initial Setup.csproj", "{EF0F3280-A384-4167-BC16-6BC1A7ACC08C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "1.Villain Names", "1.Villain Names\1.Villain Names.csproj", "{72EBBC0E-68DB-4AF2-AC73-82CDE674D0AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02.Villain Names", "1.Villain Names\02.Villain Names.csproj", "{72EBBC0E-68DB-4AF2-AC73-82CDE674D0AC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "3.Minion Names", "3.Minion Names\3.Minion Names.csproj", "{A4E8E756-667A-48A6-8C6E-EA67D98CBC20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03.Minion Names", "3.Minion Names\03.Minion Names.csproj", "{A4E8E756-667A-48A6-8C6E-EA67D98CBC20}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4. Add Minion", "4. Add Minion\4. Add Minion.csproj", "{4F9086E4-E85C-4774-8C62-4007387409B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "04.Add Minion", "4. Add Minion\04.Add Minion.csproj", "{4F9086E4-E85C-4774-8C62-4007387409B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "5. Change Town Names Casing", "5. Change Town Names Casing\5. Change Town Names Casing.csproj", "{B16F55F1-E205-4071-91EF-32A18567E0B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05.Change Town Names Casing", "5. Change Town Names Casing\05.Change Town Names Casing.csproj", "{B16F55F1-E205-4071-91EF-32A18567E0B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "6.Remove Villain", "6.Remove Villain\6.Remove Villain.csproj", "{BB79D7D1-02C5-4579-B1F4-7BCE1FDFFD18}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06.Remove Villain", "6.Remove Villain\06.Remove Villain.csproj", "{BB79D7D1-02C5-4579-B1F4-7BCE1FDFFD18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "7. Print All Minion Names", "7. Print All Minion Names\7. Print All Minion Names.csproj", "{9F33366C-B356-49D8-AA28-2535FC93FF3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07.Print All Minion Names", "7. Print All Minion Names\07.Print All Minion Names.csproj", "{9F33366C-B356-49D8-AA28-2535FC93FF3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1. Increase Minion Age", "1. Increase Minion Age\1. Increase Minion Age.csproj", "{7A2B7EBD-B565-438C-A8A4-6294EB4B28F3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "08.Increase Minion Age", "1. Increase Minion Age\08.Increase Minion Age.csproj", "{7A2B7EBD-B565-438C-A8A4-6294EB4B28F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Data.SqlClient;
 
-namespace _1.Villain_Names
+namespace _02.Villain_Names
 {
     class StartUp
     {

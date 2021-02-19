@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace _3.Minion_Names
+namespace _03.Minion_Names
 {
 
     class StartUp

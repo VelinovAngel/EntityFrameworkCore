@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Text;
 
-namespace _4._Add_Minion
+namespace _04.Add_Minion
 {
     class StartUp
     {

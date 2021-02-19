@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
 
-namespace _6.Remove_Villain
+namespace _06.Remove_Villain
 {
     class StartUp
     {

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-#nullable disable
-
-namespace EntityFrameworkCore
+namespace SoftUni.Models
 {
     public partial class Department
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace EntityFrameworkCore
+namespace EntityFrameworkCore.Model
 {
     public partial class Project
     {

@@ -11,11 +11,32 @@ namespace SoftUni
         {
             var context = new SoftUniContext();
 
-            Console.WriteLine(GetEmployeesFullInformation(context));
+            //Console.WriteLine(GetEmployeesFullInformation(context));
+            Console.WriteLine(GetEmployeesWithSalaryOver50000(context));
         }
 
 
+        public static string GetEmployeesWithSalaryOver50000(SoftUniContext context)
+        {
+            StringBuilder sb = new StringBuilder();
 
+            var employees = context.Employees
+                .Select(x => new
+                {
+                    x.FirstName,
+                    x.Salary
+                })
+                .Where(x => x.Salary > 50000)
+                .OrderBy(x => x.FirstName)
+                .ToList();
+
+            foreach (var employee in employees)
+            {
+                sb.AppendLine($"{employee.FirstName} - {employee.Salary:f2}");
+            }
+
+            return sb.ToString().TrimEnd();
+        }
         public static string GetEmployeesFullInformation(SoftUniContext context)
         {
             var employees = context.Employees

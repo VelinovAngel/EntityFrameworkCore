@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SoftUni.Data;
+using SoftUni.Models;
 
 namespace SoftUni
 {
@@ -13,10 +15,47 @@ namespace SoftUni
 
             //Console.WriteLine(GetEmployeesFullInformation(context));
             //Console.WriteLine(GetEmployeesWithSalaryOver50000(context));
-            Console.WriteLine(GetEmployeesFromResearchAndDevelopment(context));
+            //Console.WriteLine(GetEmployeesFromResearchAndDevelopment(context));
+            //Console.WriteLine(AddNewAddressToEmployee(context));
 
         }
 
+        public static string AddNewAddressToEmployee(SoftUniContext context)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            Address newAddress = new Address
+            {
+                AddressText = "Vitoshka 15",
+                TownId = 4,
+            };
+
+            context.Addresses.Add(newAddress);
+            context.SaveChanges();
+
+            Employee nakov = context.Employees
+                .FirstOrDefault(x => x.LastName == "Nakov");
+
+            nakov.AddressId = newAddress.AddressId;
+            context.SaveChanges();
+
+            var employees = context.Employees
+                .Select(x=> new
+                {
+                    x.Address.AddressText,
+                    x.Address.AddressId,
+                })
+                .OrderByDescending(x => x.AddressId)
+                .Take(10)
+                .ToList();
+
+            foreach (var employee in employees)
+            {
+                sb.AppendLine($"{employee.AddressText}");
+            }
+
+            return sb.ToString().TrimEnd();
+        }
         public static string GetEmployeesFromResearchAndDevelopment(SoftUniContext context)
         {
             StringBuilder sb = new StringBuilder();

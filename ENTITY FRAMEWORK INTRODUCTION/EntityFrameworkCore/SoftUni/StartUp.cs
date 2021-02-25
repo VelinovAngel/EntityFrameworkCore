@@ -50,13 +50,14 @@ namespace SoftUni
 
             foreach (var emp in employees)
             {
-                sb.AppendLine($"{emp.employessFirstName} {emp.employessLastName} – Manager: {emp.managerFirstName} {emp.managerLastName}");
+                sb.AppendLine($"{emp.employessFirstName} {emp.employessLastName} - Manager: {emp.managerFirstName} {emp.managerLastName}");
 
                 foreach (var empPro in emp.Projects)
                 {
                     string endDate = empPro.EndDate.HasValue ? empPro.EndDate.Value.ToString("M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture) : "not finished";
+                    string startDate = empPro.StartDate.ToString("M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture);
 
-                    sb.AppendLine($"--{empPro.ProjectName} -{empPro.StartDate} - {endDate}");
+                    sb.AppendLine($"--{empPro.ProjectName} - {startDate} - {endDate}");
                 }
             }
 

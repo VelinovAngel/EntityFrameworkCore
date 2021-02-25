@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using SoftUni.Data;
 using SoftUni.Models;
 
@@ -17,9 +19,49 @@ namespace SoftUni
             //Console.WriteLine(GetEmployeesWithSalaryOver50000(context));
             //Console.WriteLine(GetEmployeesFromResearchAndDevelopment(context));
             //Console.WriteLine(AddNewAddressToEmployee(context));
+            Console.WriteLine(GetEmployeesInPeriod(context));
 
         }
 
+        public static string GetEmployeesInPeriod(SoftUniContext context)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            var employees = context.Employees
+               .Include(x => x.EmployeesProjects)
+               .ThenInclude(x => x.Project)
+               .Where(x => x.EmployeesProjects.Any(x => x.Project.StartDate.Year >= 2001 && x.Project.StartDate.Year <= 2003))
+               .Select(x => new
+               {
+                   employessFirstName = x.FirstName,
+                   employessLastName = x.LastName,
+                   managerFirstName = x.Manager.FirstName,
+                   managerLastName = x.Manager.LastName,
+                   Projects = x.EmployeesProjects.Select(x => new
+                   {
+                       ProjectName = x.Project.Name,
+                       StartDate = x.Project.StartDate,
+                       EndDate = x.Project.EndDate
+                   })
+
+               })
+               .Take(10)
+               .ToList();
+
+            foreach (var emp in employees)
+            {
+                sb.AppendLine($"{emp.employessFirstName} {emp.employessLastName} – Manager: {emp.managerFirstName} {emp.managerLastName}");
+
+                foreach (var empPro in emp.Projects)
+                {
+                    string endDate = empPro.EndDate.HasValue ? empPro.EndDate.Value.ToString("M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture) : "not finished";
+
+                    sb.AppendLine($"--{empPro.ProjectName} -{empPro.StartDate} - {endDate}");
+                }
+            }
+
+            return sb.ToString().TrimEnd();
+        }
         public static string AddNewAddressToEmployee(SoftUniContext context)
         {
             StringBuilder sb = new StringBuilder();
@@ -40,7 +82,7 @@ namespace SoftUni
             context.SaveChanges();
 
             var employees = context.Employees
-                .Select(x=> new
+                .Select(x => new
                 {
                     x.Address.AddressText,
                     x.Address.AddressId,

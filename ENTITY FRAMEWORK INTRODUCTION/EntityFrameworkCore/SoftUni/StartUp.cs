@@ -21,10 +21,42 @@ namespace SoftUni
             //Console.WriteLine(AddNewAddressToEmployee(context));
             //Console.WriteLine(GetEmployeesInPeriod(context));
             //Console.WriteLine(GetAddressesByTown(context));
+            Console.WriteLine(GetEmployee147(context));
 
 
         }
 
+        public static string GetEmployee147(SoftUniContext context)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            var employee147 = context.Employees
+                .Select(x => new Employee
+                {
+                    EmployeeId = x.EmployeeId,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    JobTitle = x.JobTitle,
+                    EmployeesProjects = x.EmployeesProjects.Select(p => new EmployeeProject
+                    {
+                        Project = p.Project
+                    })
+                    .OrderBy(x => x.Project.Name).
+                    ToList()
+
+                })
+                .FirstOrDefault(x => x.EmployeeId == 147);
+
+
+            sb.AppendLine($"{employee147.FirstName} {employee147.LastName} - {employee147.JobTitle}");
+
+            foreach (var project in employee147.EmployeesProjects)
+            {
+                sb.AppendLine($"{project.Project.Name}");
+            }
+
+            return sb.ToString().TrimEnd();
+        }
         public static string GetAddressesByTown(SoftUniContext context)
         {
             StringBuilder sb = new StringBuilder();

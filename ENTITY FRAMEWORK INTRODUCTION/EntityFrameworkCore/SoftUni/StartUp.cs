@@ -21,11 +21,50 @@ namespace SoftUni
             //Console.WriteLine(AddNewAddressToEmployee(context));
             //Console.WriteLine(GetEmployeesInPeriod(context));
             //Console.WriteLine(GetAddressesByTown(context));
-            Console.WriteLine(GetEmployee147(context));
+            //Console.WriteLine(GetEmployee147(context));
+            Console.WriteLine(GetDepartmentsWithMoreThan5Employees(context));
 
 
         }
 
+        public static string GetDepartmentsWithMoreThan5Employees(SoftUniContext context)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            var departments = context.Departments
+                .Where(x => x.Employees.Count > 5)
+                .Select(x => new
+                {
+                    DepartmentName = x.Name,
+                    ManagerFirstName = x.Manager.FirstName,
+                    ManagerLastName = x.Manager.LastName,
+                    Count = x.Employees.Count(),
+                    Employees = x.Employees.Select(e => new
+                    {
+                        e.FirstName,
+                        e.LastName,
+                        e.JobTitle
+                    })
+                    .OrderBy(x => x.FirstName)
+                    .ThenBy(x => x.LastName)
+                    .ToList()
+                })
+                .OrderBy(x => x.Count)
+                .ThenBy(x => x.DepartmentName)
+                .ToList();
+
+            foreach (var department in departments)
+            {
+                sb.AppendLine($"{department.DepartmentName} - {department.ManagerFirstName} {department.ManagerLastName}");
+
+                foreach (var employes in department.Employees)
+                {
+                    sb.AppendLine($"{employes.FirstName} {employes.LastName} - {employes.JobTitle}");
+                }
+            }
+
+            return sb.ToString().TrimEnd();
+        }
         public static string GetEmployee147(SoftUniContext context)
         {
             StringBuilder sb = new StringBuilder();

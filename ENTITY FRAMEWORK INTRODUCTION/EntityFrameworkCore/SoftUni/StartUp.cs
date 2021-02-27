@@ -19,10 +19,35 @@ namespace SoftUni
             //Console.WriteLine(GetEmployeesWithSalaryOver50000(context));
             //Console.WriteLine(GetEmployeesFromResearchAndDevelopment(context));
             //Console.WriteLine(AddNewAddressToEmployee(context));
-            Console.WriteLine(GetEmployeesInPeriod(context));
+            //Console.WriteLine(GetEmployeesInPeriod(context));
+            Console.WriteLine(GetAddressesByTown(context));
 
         }
 
+        public static string GetAddressesByTown(SoftUniContext context)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            var employeesByTown = context.Addresses
+                .OrderByDescending(x => x.Employees.Count)
+                .ThenBy(x => x.Town.Name)
+                .ThenBy(x => x.AddressText)
+                .Take(10)
+                .Select(x => new
+                {
+                    AddressText = x.AddressText,
+                    TownName = x.Town.Name,
+                    EmployeesCount = x.Employees.Count,
+                })
+                .ToList();
+
+            foreach (var employee in employeesByTown)
+            {
+                sb.AppendLine($"{employee.AddressText}, {employee.TownName} - {employee.EmployeesCount} employees");
+            }
+
+            return sb.ToString().TrimEnd();
+        }
         public static string GetEmployeesInPeriod(SoftUniContext context)
         {
             StringBuilder sb = new StringBuilder();

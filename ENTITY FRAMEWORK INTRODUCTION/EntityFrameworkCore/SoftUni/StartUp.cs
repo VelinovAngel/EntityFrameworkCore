@@ -22,11 +22,37 @@ namespace SoftUni
             //Console.WriteLine(GetEmployeesInPeriod(context));
             //Console.WriteLine(GetAddressesByTown(context));
             //Console.WriteLine(GetEmployee147(context));
-            Console.WriteLine(GetDepartmentsWithMoreThan5Employees(context));
+            //Console.WriteLine(GetDepartmentsWithMoreThan5Employees(context));
+            Console.WriteLine(GetLatestProjects(context));
 
 
         }
 
+        public static string GetLatestProjects(SoftUniContext context)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            var projects = context.Projects
+                .OrderByDescending(x => x.ProjectId)
+                .Take(10)
+                .Select(x => new
+                {
+                    x.Name,
+                    x.Description,
+                    x.StartDate,
+                })
+                .OrderBy(x => x.Name)
+                .ToList();
+
+            foreach (var project in projects)
+            {
+                sb.AppendLine(project.Name);
+                sb.AppendLine(project.Description);
+                sb.AppendLine(project.StartDate.ToString(@"M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture));
+            }
+
+            return sb.ToString().TrimEnd();
+        }
         public static string GetDepartmentsWithMoreThan5Employees(SoftUniContext context)
         {
             StringBuilder sb = new StringBuilder();

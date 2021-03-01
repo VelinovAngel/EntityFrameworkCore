@@ -24,11 +24,29 @@ namespace SoftUni
             //Console.WriteLine(GetEmployee147(context));
             //Console.WriteLine(GetDepartmentsWithMoreThan5Employees(context));
             //Console.WriteLine(GetLatestProjects(context));
-            Console.WriteLine(IncreaseSalaries(context));
+            //Console.WriteLine(IncreaseSalaries(context));
+            Console.WriteLine(GetEmployeesByFirstNameStartingWithSa(context));
 
 
         }
 
+        public static string GetEmployeesByFirstNameStartingWithSa(SoftUniContext context)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            var employees = context.Employees
+                .Where(x => x.FirstName.ToLower().StartsWith("sa"))
+                .OrderBy(x => x.FirstName)
+                .ThenBy(x => x.LastName)
+                .ToList();
+
+            foreach (var employee in employees)
+            {
+                sb.AppendLine($"{employee.FirstName} {employee.LastName} - {employee.JobTitle} - (${employee.Salary:f2})");
+            }
+
+            return sb.ToString().TrimEnd();
+        }
         public static string IncreaseSalaries(SoftUniContext context)
         {
             StringBuilder sb = new StringBuilder();
@@ -36,7 +54,7 @@ namespace SoftUni
             context.Employees
                 .Where(x => new[]
                 {
-                    "Engineering", 
+                    "Engineering",
                     "Tool Design",
                     "Marketing",
                     "Information Services",
@@ -49,7 +67,7 @@ namespace SoftUni
             var employees = context.Employees
                   .Where(x => new[]
                 {
-                    "Engineering", 
+                    "Engineering",
                     "Tool Design",
                     "Marketing",
                     "Information Services",

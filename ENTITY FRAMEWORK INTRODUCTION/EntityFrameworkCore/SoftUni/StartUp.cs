@@ -22,12 +22,38 @@ namespace SoftUni
             //Console.WriteLine(GetEmployeesInPeriod(context));
             //Console.WriteLine(GetAddressesByTown(context));
             //Console.WriteLine(GetEmployee147(context));
-            //Console.WriteLine(GetDepartmentsWithMoreThan5Employees(context));
-            Console.WriteLine(GetLatestProjects(context));
+            Console.WriteLine(GetDepartmentsWithMoreThan5Employees(context));
+            //Console.WriteLine(GetLatestProjects(context));
+            //Console.WriteLine(IncreaseSalaries(context));
 
 
         }
 
+        public static string IncreaseSalaries(SoftUniContext context)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            var employees = context.Employees
+                .Where(x => new[] 
+                {
+                    "Engineering, Tool Design",
+                    "Marketing ",
+                    "Information Services",
+                }.Contains(x.Department.Name))
+                .OrderBy(x=>x.FirstName)
+                .ThenBy(x=>x.LastName)
+                .ToList();
+
+
+            foreach (var employee in employees)
+            {
+                employee.Salary *= 1.12M;
+                sb.AppendLine($"{employee.FirstName} {employee.LastName} (${employee.Salary:f2})");
+            }
+
+            return sb.ToString().TrimEnd();
+                
+        }
         public static string GetLatestProjects(SoftUniContext context)
         {
             StringBuilder sb = new StringBuilder();
@@ -59,12 +85,13 @@ namespace SoftUni
 
             var departments = context.Departments
                 .Where(x => x.Employees.Count > 5)
+                .OrderBy(x => x.Employees.Count)
+                .ThenBy(x => x.Name)
                 .Select(x => new
                 {
                     DepartmentName = x.Name,
                     ManagerFirstName = x.Manager.FirstName,
                     ManagerLastName = x.Manager.LastName,
-                    Count = x.Employees.Count(),
                     Employees = x.Employees.Select(e => new
                     {
                         e.FirstName,
@@ -74,9 +101,7 @@ namespace SoftUni
                     .OrderBy(x => x.FirstName)
                     .ThenBy(x => x.LastName)
                     .ToList()
-                })
-                .OrderBy(x => x.Count)
-                .ThenBy(x => x.DepartmentName)
+                })       
                 .ToList();
 
             foreach (var department in departments)

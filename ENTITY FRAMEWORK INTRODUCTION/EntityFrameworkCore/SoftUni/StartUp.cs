@@ -22,8 +22,8 @@ namespace SoftUni
             //Console.WriteLine(GetEmployeesInPeriod(context));
             //Console.WriteLine(GetAddressesByTown(context));
             //Console.WriteLine(GetEmployee147(context));
-            Console.WriteLine(GetDepartmentsWithMoreThan5Employees(context));
-            //Console.WriteLine(GetLatestProjects(context));
+            //Console.WriteLine(GetDepartmentsWithMoreThan5Employees(context));
+            Console.WriteLine(GetLatestProjects(context));
             //Console.WriteLine(IncreaseSalaries(context));
 
 
@@ -34,14 +34,14 @@ namespace SoftUni
             StringBuilder sb = new StringBuilder();
 
             var employees = context.Employees
-                .Where(x => new[] 
+                .Where(x => new[]
                 {
                     "Engineering, Tool Design",
                     "Marketing ",
                     "Information Services",
                 }.Contains(x.Department.Name))
-                .OrderBy(x=>x.FirstName)
-                .ThenBy(x=>x.LastName)
+                .OrderBy(x => x.FirstName)
+                .ThenBy(x => x.LastName)
                 .ToList();
 
 
@@ -52,29 +52,29 @@ namespace SoftUni
             }
 
             return sb.ToString().TrimEnd();
-                
+
         }
         public static string GetLatestProjects(SoftUniContext context)
         {
             StringBuilder sb = new StringBuilder();
 
             var projects = context.Projects
-                .OrderByDescending(x => x.ProjectId)
+                .OrderByDescending(x => x.StartDate)
                 .Take(10)
                 .Select(x => new
                 {
-                    x.Name,
-                    x.Description,
-                    x.StartDate,
+                    Name = x.Name,
+                    Description = x.Description,
+                    StartData = x.StartDate.ToString("M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture)
                 })
                 .OrderBy(x => x.Name)
                 .ToList();
 
             foreach (var project in projects)
             {
-                sb.AppendLine(project.Name);
-                sb.AppendLine(project.Description);
-                sb.AppendLine(project.StartDate.ToString(@"M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture));
+                sb.AppendLine(project.Name)
+                .AppendLine(project.Description)
+                .AppendLine(project.StartData);
             }
 
             return sb.ToString().TrimEnd();
@@ -101,7 +101,7 @@ namespace SoftUni
                     .OrderBy(x => x.FirstName)
                     .ThenBy(x => x.LastName)
                     .ToList()
-                })       
+                })
                 .ToList();
 
             foreach (var department in departments)

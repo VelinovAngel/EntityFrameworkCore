@@ -23,8 +23,8 @@ namespace SoftUni
             //Console.WriteLine(GetAddressesByTown(context));
             //Console.WriteLine(GetEmployee147(context));
             //Console.WriteLine(GetDepartmentsWithMoreThan5Employees(context));
-            Console.WriteLine(GetLatestProjects(context));
-            //Console.WriteLine(IncreaseSalaries(context));
+            //Console.WriteLine(GetLatestProjects(context));
+            Console.WriteLine(IncreaseSalaries(context));
 
 
         }
@@ -33,21 +33,39 @@ namespace SoftUni
         {
             StringBuilder sb = new StringBuilder();
 
-            var employees = context.Employees
+            context.Employees
                 .Where(x => new[]
                 {
-                    "Engineering, Tool Design",
-                    "Marketing ",
+                    "Engineering", 
+                    "Tool Design",
+                    "Marketing",
                     "Information Services",
                 }.Contains(x.Department.Name))
-                .OrderBy(x => x.FirstName)
-                .ThenBy(x => x.LastName)
-                .ToList();
+                .ToList()
+                .ForEach(x => x.Salary *= 1.12M);
 
+            context.SaveChanges();
+
+            var employees = context.Employees
+                  .Where(x => new[]
+                {
+                    "Engineering", 
+                    "Tool Design",
+                    "Marketing",
+                    "Information Services",
+                }.Contains(x.Department.Name))
+                  .Select(x => new
+                  {
+                      x.FirstName,
+                      x.LastName,
+                      x.Salary
+                  })
+                  .OrderBy(x => x.FirstName)
+                  .ThenBy(x => x.LastName)
+                  .ToList();
 
             foreach (var employee in employees)
             {
-                employee.Salary *= 1.12M;
                 sb.AppendLine($"{employee.FirstName} {employee.LastName} (${employee.Salary:f2})");
             }
 

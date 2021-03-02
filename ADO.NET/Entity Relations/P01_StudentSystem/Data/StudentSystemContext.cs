@@ -25,7 +25,7 @@ namespace P01_StudentSystem.Data
 
         public DbSet<Course> Courses { get; set; }
 
-        public DbSet<Homework> Homeworks { get; set; }
+        public DbSet<Homework> HomeworkSubmissions { get; set; }
 
         public DbSet<Resource> Resources { get; set; }
 

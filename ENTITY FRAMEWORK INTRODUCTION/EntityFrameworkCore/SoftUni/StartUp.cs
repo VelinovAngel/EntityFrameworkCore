@@ -27,9 +27,42 @@ namespace SoftUni
             //Console.WriteLine(IncreaseSalaries(context));
             //Console.WriteLine(GetEmployeesByFirstNameStartingWithSa(context));
             //Console.WriteLine(DeleteProjectById(context));
+            //Console.WriteLine(RemoveTown(context));
 
         }
 
+        public static string RemoveTown(SoftUniContext context)
+        {
+            var town = context.Towns
+                .Include(x=>x.Addresses)
+                .FirstOrDefault(x => x.Name == "Seattle");
+
+            var allAddresses = town.Addresses.Select(x => x.AddressId).ToList();
+
+            var employeesId = context.Employees
+                .Where(x =>x.AddressId.HasValue && allAddresses.Contains(x.AddressId.Value));
+
+            foreach (var employee in employeesId)
+            {
+                employee.AddressId = null;
+            }
+
+            foreach (var address in allAddresses)
+            {
+                var currAddress = context.Addresses
+                    .FirstOrDefault(x => x.AddressId == address);
+
+                context.Addresses.Remove(currAddress);
+            }
+
+            context.Towns.Remove(town);
+
+            context.SaveChanges();
+
+            string TownsDeleted = $"{allAddresses.Count} addresses in {town.Name} were deleted";
+
+            return TownsDeleted;
+        }
         public static string DeleteProjectById(SoftUniContext context)
         {
             StringBuilder sb = new StringBuilder();

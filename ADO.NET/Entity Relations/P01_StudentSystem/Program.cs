@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Entity_Relations
+namespace P01_StudentSystem
 {
     class Program
     {

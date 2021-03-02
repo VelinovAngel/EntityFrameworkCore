@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace P01_StudentSystem.Data
 {
-    class StudentSystemContext
+    public class StudentSystemContext : DbContext
     {
+        //
     }
 }

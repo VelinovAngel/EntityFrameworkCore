@@ -10,7 +10,7 @@ using P03_FootballBetting.Data;
 namespace P03_FootballBetting.Migrations
 {
     [DbContext(typeof(FootballBettingContext))]
-    [Migration("20210303200308_InitialCreate")]
+    [Migration("20210303203150_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -283,13 +283,13 @@ namespace P03_FootballBetting.Migrations
 
             modelBuilder.Entity("P03_FootballBetting.Data.Models.Bet", b =>
                 {
-                    b.HasOne("P03_FootballBetting.Data.Models.Game", null)
+                    b.HasOne("P03_FootballBetting.Data.Models.Game", "Game")
                         .WithMany("Bets")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("P03_FootballBetting.Data.Models.User", null)
+                    b.HasOne("P03_FootballBetting.Data.Models.User", "User")
                         .WithMany("Bets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -301,13 +301,13 @@ namespace P03_FootballBetting.Migrations
                     b.HasOne("P03_FootballBetting.Data.Models.Team", "AwayTeam")
                         .WithMany("AwayGames")
                         .HasForeignKey("AwayTeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("P03_FootballBetting.Data.Models.Team", "HomeTeam")
                         .WithMany("HomeGames")
                         .HasForeignKey("HomeTeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -346,19 +346,19 @@ namespace P03_FootballBetting.Migrations
                     b.HasOne("P03_FootballBetting.Data.Models.Color", "PrimaryKitColor")
                         .WithMany("PrimaryKitTeams")
                         .HasForeignKey("PrimaryKitColorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("P03_FootballBetting.Data.Models.Color", "SecondaryKitColor")
                         .WithMany("SecondaryKitTeams")
                         .HasForeignKey("SecondaryKitColorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("P03_FootballBetting.Data.Models.Town", "Town")
                         .WithMany("Teams")
                         .HasForeignKey("TownId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

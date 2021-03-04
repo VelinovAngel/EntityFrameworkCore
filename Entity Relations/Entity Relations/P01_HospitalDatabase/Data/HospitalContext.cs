@@ -12,7 +12,7 @@ namespace P01_HospitalDatabase.Data
         {
         }
 
-        public HospitalContext(DbContextOptions options) 
+        public HospitalContext(DbContextOptions options)
             : base(options)
         {
         }
@@ -22,6 +22,7 @@ namespace P01_HospitalDatabase.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<PatientMedicament> Prescriptions { get; set; }
         public DbSet<Visitation> Visitations { get; set; }
+        public DbSet<Doctor> Doctor { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -58,6 +59,13 @@ namespace P01_HospitalDatabase.Data
                     .HasForeignKey(e => e.MedicamentId);
             });
 
+            modelBuilder.Entity<Visitation>(x=>
+            {
+                x.HasOne(x => x.Doctor)
+                .WithMany(x => x.Visitations)
+                .HasForeignKey(x => x.DoctorId)
+                .OnDelete(DeleteBehavior.Restrict);
+            });
 
             base.OnModelCreating(modelBuilder);
         }

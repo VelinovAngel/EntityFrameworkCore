@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using P01_HospitalDatabase.Data;
 
 namespace P01_HospitalDatabase.Migrations
 {
     [DbContext(typeof(HospitalContext))]
-    partial class HospitalContextModelSnapshot : ModelSnapshot
+    [Migration("20210304174421_CreateCollectionsVitations")]
+    partial class CreateCollectionsVitations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,26 +44,6 @@ namespace P01_HospitalDatabase.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("Diagnoses");
-                });
-
-            modelBuilder.Entity("P01_HospitalDatabase.Data.Models.Doctor", b =>
-                {
-                    b.Property<int>("DoctorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Speciality")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.HasKey("DoctorId");
-
-                    b.ToTable("Doctor");
                 });
 
             modelBuilder.Entity("P01_HospitalDatabase.Data.Models.Medicament", b =>
@@ -140,15 +122,10 @@ namespace P01_HospitalDatabase.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
                     b.HasKey("VisitationId");
-
-                    b.HasIndex("DoctorId");
 
                     b.HasIndex("PatientId");
 
@@ -181,12 +158,6 @@ namespace P01_HospitalDatabase.Migrations
 
             modelBuilder.Entity("P01_HospitalDatabase.Data.Models.Visitation", b =>
                 {
-                    b.HasOne("P01_HospitalDatabase.Data.Models.Doctor", "Doctor")
-                        .WithMany("Visitations")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("P01_HospitalDatabase.Data.Models.Patient", "Patient")
                         .WithMany("Visitations")
                         .HasForeignKey("PatientId")

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-
-namespace MusicHub.Data.Models
+﻿namespace MusicHub.Data.Models
 {
+    using System;
+    using System.Linq;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
     public class Album
     {
         public Album()

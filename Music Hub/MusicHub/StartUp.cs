@@ -5,7 +5,6 @@
     using System.Text;
     using Data;
     using Initializer;
-    using Microsoft.EntityFrameworkCore;
 
     public class StartUp
     {
@@ -14,7 +13,7 @@
             MusicHubDbContext context = 
                 new MusicHubDbContext();
 
-            //DbInitializer.ResetDatabase(context);
+            DbInitializer.ResetDatabase(context);
             Console.WriteLine(ExportAlbumsInfo(context, 9));
             //Test your solutions here
         }
@@ -23,21 +22,46 @@
         {
             StringBuilder sb = new StringBuilder();
 
-            var albums = context.Albums
-                .Where(x => x.ProducerId == producerId)
-                .ToList();
-                
-
-            foreach (var album in albums)
-            {
-                sb.AppendLine($"{album.Name}").
-                    AppendLine($"{album.ReleaseDate}");
-                foreach (var songs in album.Songs)
+            var albumsInfo = context.Producers
+                .FirstOrDefault(x => x.Id == producerId)
+                .Albums
+                .Select(album => new
                 {
-                    sb.AppendLine($"{songs.Name}")
-                        .AppendLine($"{songs.Price:f2}")
-                        .AppendLine($"{songs.Writer}");
+                    albumName = album.Name,
+                    releaseDate = album.ReleaseDate,
+                    producerName = album.Producer.Name,
+                    songs = album.Songs.Select(song => new
+                    {
+                        songName = song.Name,
+                        price = song.Price,
+                        writer = song.Writer.Name
+                    })
+                    .OrderByDescending(x => x.songName)
+                    .ThenBy(x => x.writer)
+                    .ToList(),
+                    totalAlbumPrice = album.Price
+                })
+                .OrderByDescending(x => x.totalAlbumPrice)
+                .ToList();
+
+
+            
+            foreach (var album in albumsInfo)
+            {
+                sb.AppendLine($"-AlbumName: {album.albumName}").
+                    AppendLine($"-ReleaseDate: {album.releaseDate.ToString("MM/dd/yyyy")}").
+                    AppendLine($"-ProducerName: {album.producerName}").
+                    AppendLine($"-Songs:");
+
+                int counter = 1;
+                foreach (var songs in album.songs)
+                {
+                    sb.AppendLine($"---#{counter++}").
+                        AppendLine($"---SongName: {songs.songName}")
+                        .AppendLine($"---Price: {songs.price:f2}")
+                        .AppendLine($"---Writer: {songs.writer}");
                 }
+                sb.AppendLine($"-AlbumPrice: {album.totalAlbumPrice:f2}");
             }   
 
             return sb.ToString().TrimEnd();

@@ -37,14 +37,13 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<SongPerformer>(x =>
-            {
-                x.HasKey(x => new
+            builder.Entity<SongPerformer>()
+                .HasKey(x => new
                 {
                     x.SongId,
                     x.PerformerId
                 });
-            });
+          
 
 
         }

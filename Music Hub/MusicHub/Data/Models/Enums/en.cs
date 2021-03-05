@@ -6,8 +6,7 @@ namespace MusicHub.Data.Models.Enums
 {
     public enum Genre
     {
-        //Blues, Rap, PopMusic, Rock, Jazz
-        Blues = 0,
+         Blues = 0,
         Rap = 1,
         PopMusic = 2,
         Rock = 3,

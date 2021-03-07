@@ -1,9 +1,11 @@
 ﻿namespace BookShop
 {
+    using System;
+    using System.Linq;
+    using System.Text;
+    using BookShop.Models.Enums;
     using Data;
     using Initializer;
-    using System;
-    using System.Text;
 
     public class StartUp
     {
@@ -21,9 +23,19 @@
         {
             StringBuilder sb = new StringBuilder();
 
+            var ageRestriction = Enum.Parse<AgeRestriction>(command, true);
 
+            var books = context.Books
+                .Where(x => x.AgeRestriction == ageRestriction)
+                .OrderBy(x=>x.Title)
+                .ToList();
 
-
+            foreach (var book in books)
+            {
+                sb
+                    .AppendLine(book.Title);
+            }
+           
             return sb.ToString().TrimEnd();
         }
     }

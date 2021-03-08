@@ -15,4 +15,4 @@
 
         public ICollection<BookCategory> CategoryBooks { get; set; }
     }
-}
+}       

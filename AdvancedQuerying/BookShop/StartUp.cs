@@ -22,7 +22,8 @@
             //Console.WriteLine(GetBooksByPrice(context));
             //Console.WriteLine(GetBooksNotReleasedIn(context, 1998));
             //Console.WriteLine(GetBooksByCategory(context, command));
-            Console.WriteLine(GetBooksReleasedBefore(context, command));
+            //Console.WriteLine(GetBooksReleasedBefore(context, command));
+            Console.WriteLine(GetAuthorNamesEndingIn(context, command));
         }
 
         public static string GetBooksByAgeRestriction(BookShopContext context, string command)
@@ -135,8 +136,7 @@
 
         public static string GetBooksReleasedBefore(BookShopContext context, string date)
         {
-            var myDate = DateTime.Parse(date, CultureInfo.InvariantCulture);
-
+  
             var books = context.Books
                 .Select(x => new
                 {
@@ -145,7 +145,7 @@
                     price = x.Price,
                     releaseDate = x.ReleaseDate
                 })
-                .Where(x => x.releaseDate.Value < myDate/*DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture)*/)
+                .Where(x => x.releaseDate.Value <DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture))
                 .OrderByDescending(x => x.releaseDate)
                 .ToList();
 
@@ -155,6 +155,29 @@
             {
                 sb
                     .AppendLine($"{book.title} - {book.type} - ${book.price:f2}");
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        public static string GetAuthorNamesEndingIn(BookShopContext context, string input)
+        {
+            var authors = context.Authors
+                .Where(x => x.FirstName.EndsWith(input))
+                .Select(x => new
+                {
+                    fullName = x.FirstName + " " + x.LastName
+                })
+                .OrderBy(x=>x.fullName)
+                .ToList();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var author in authors)
+            {
+
+                sb
+                    .AppendLine(author.fullName);
             }
 
             return sb.ToString().TrimEnd();

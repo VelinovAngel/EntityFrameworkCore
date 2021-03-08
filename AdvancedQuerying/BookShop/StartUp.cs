@@ -1,6 +1,7 @@
 ﻿namespace BookShop
 {
     using System;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
     using BookShop.Models.Enums;
@@ -20,7 +21,8 @@
             //Console.WriteLine(GetGoldenBooks(context));
             //Console.WriteLine(GetBooksByPrice(context));
             //Console.WriteLine(GetBooksNotReleasedIn(context, 1998));
-            Console.WriteLine(GetBooksByCategory(context, command));
+            //Console.WriteLine(GetBooksByCategory(context, command));
+            Console.WriteLine(GetBooksReleasedBefore(context, command));
         }
 
         public static string GetBooksByAgeRestriction(BookShopContext context, string command)
@@ -130,5 +132,33 @@
 
             return sb.ToString().TrimEnd();
         }
+
+        public static string GetBooksReleasedBefore(BookShopContext context, string date)
+        {
+            var myDate = DateTime.Parse(date, CultureInfo.InvariantCulture);
+
+            var books = context.Books
+                .Select(x => new
+                {
+                    title = x.Title,
+                    type = x.EditionType,
+                    price = x.Price,
+                    releaseDate = x.ReleaseDate
+                })
+                .Where(x => x.releaseDate.Value < myDate/*DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture)*/)
+                .OrderByDescending(x => x.releaseDate)
+                .ToList();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var book in books)
+            {
+                sb
+                    .AppendLine($"{book.title} - {book.type} - ${book.price:f2}");
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
     }
 }

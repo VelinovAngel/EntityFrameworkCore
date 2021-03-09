@@ -15,7 +15,7 @@
             using var context = new BookShopContext();
             DbInitializer.ResetDatabase(context);
 
-            int command = int.Parse(Console.ReadLine());
+            //int command = int.Parse(Console.ReadLine());
 
             //Console.WriteLine(GetBooksByAgeRestriction(context, command));
             //Console.WriteLine(GetGoldenBooks(context));
@@ -26,7 +26,8 @@
             //Console.WriteLine(GetAuthorNamesEndingIn(context, command));
             //Console.WriteLine(GetBookTitlesContaining(context, command));
             //Console.WriteLine(GetBooksByAuthor(context, command));
-            Console.WriteLine(CountBooks(context, command));
+            //Console.WriteLine(CountBooks(context, command));
+            Console.WriteLine(CountCopiesByAuthor(context));
         }
 
         public static string GetBooksByAgeRestriction(BookShopContext context, string command)
@@ -244,6 +245,26 @@
                 .ToList();
 
             return books.Count();
+        }
+
+        public static string CountCopiesByAuthor(BookShopContext context)
+        {
+            var books = context.Authors
+                .Select(x => new
+                {
+                    numberBooks = x.Books.Sum(x=>x.Copies),
+                    firstName = x.FirstName,
+                    lastName = x.LastName
+                })
+                .OrderByDescending(x=>x.numberBooks)
+                .ToList();
+
+            StringBuilder sb = new StringBuilder();
+
+            var result = string.Join(Environment.NewLine, books
+                .Select(x => $"{x.firstName} {x.lastName} - {x.numberBooks}"));
+
+            return result;
         }
     }
 }

@@ -24,7 +24,8 @@
             //Console.WriteLine(GetBooksByCategory(context, command));
             //Console.WriteLine(GetBooksReleasedBefore(context, command));
             //Console.WriteLine(GetAuthorNamesEndingIn(context, command));
-            Console.WriteLine(GetBookTitlesContaining(context, command));
+            //Console.WriteLine(GetBookTitlesContaining(context, command));
+            Console.WriteLine(GetBooksByAuthor(context, command));
         }
 
         public static string GetBooksByAgeRestriction(BookShopContext context, string command)
@@ -187,7 +188,7 @@
         public static string GetBookTitlesContaining(BookShopContext context, string input)
         {
             var books = context.Books
-                .Select(x=> new
+                .Select(x => new
                 {
                     title = x.Title
                 })
@@ -206,5 +207,29 @@
             return sb.ToString().TrimEnd();
         }
 
+        public static string GetBooksByAuthor(BookShopContext context, string input)
+        {
+            var booksAndAuthors = context.Books
+                .Select(x => new
+                {
+                    bookId = x.BookId,
+                    title = x.Title,
+                    firstName = x.Author.FirstName,
+                    lastName = x.Author.LastName
+                })
+                .Where(x => x.lastName.ToLower().StartsWith(input.ToLower()))
+                .OrderBy(x => x.bookId)
+                .ToList();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var book in booksAndAuthors)
+            {
+                sb
+                    .AppendLine($"{book.title} ({book.firstName} {book.lastName})");
+            }
+
+            return sb.ToString().TrimEnd();
+        }
     }
 }

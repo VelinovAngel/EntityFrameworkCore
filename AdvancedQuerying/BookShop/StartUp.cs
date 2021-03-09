@@ -27,7 +27,8 @@
             //Console.WriteLine(GetBookTitlesContaining(context, command));
             //Console.WriteLine(GetBooksByAuthor(context, command));
             //Console.WriteLine(CountBooks(context, command));
-            Console.WriteLine(CountCopiesByAuthor(context));
+            //Console.WriteLine(CountCopiesByAuthor(context));
+            Console.WriteLine(GetTotalProfitByCategory(context));
         }
 
         public static string GetBooksByAgeRestriction(BookShopContext context, string command)
@@ -252,11 +253,11 @@
             var books = context.Authors
                 .Select(x => new
                 {
-                    numberBooks = x.Books.Sum(x=>x.Copies),
+                    numberBooks = x.Books.Sum(x => x.Copies),
                     firstName = x.FirstName,
                     lastName = x.LastName
                 })
-                .OrderByDescending(x=>x.numberBooks)
+                .OrderByDescending(x => x.numberBooks)
                 .ToList();
 
             StringBuilder sb = new StringBuilder();
@@ -266,5 +267,32 @@
 
             return result;
         }
+
+        public static string GetTotalProfitByCategory(BookShopContext context)
+        {
+            var categories = context.Categories
+                .Select(x => new
+                {
+                    name = x.Name,
+                    profit = x.CategoryBooks.Sum(x => x.Book.Price * x.Book.Copies)
+
+                })
+                .OrderByDescending(x => x.profit)
+                .ThenBy(c => c.name)
+                .ToList();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var category in categories)
+            {
+                sb
+                    .AppendLine($"{category.name} ${category.profit:f2}");
+            }
+
+            return sb.ToString().TrimEnd();
+        }
     }
+
+
 }
+

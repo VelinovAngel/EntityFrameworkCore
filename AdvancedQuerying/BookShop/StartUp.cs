@@ -15,7 +15,7 @@
             using var context = new BookShopContext();
             DbInitializer.ResetDatabase(context);
 
-            string command = Console.ReadLine().ToLower();
+            string command = Console.ReadLine();
 
             //Console.WriteLine(GetBooksByAgeRestriction(context, command));
             //Console.WriteLine(GetGoldenBooks(context));
@@ -187,11 +187,11 @@
         public static string GetBookTitlesContaining(BookShopContext context, string input)
         {
             var books = context.Books
-                .Select(x => new
+                .Select(x=> new
                 {
                     title = x.Title
                 })
-                .Where(x => x.title.ToLower().Contains(input))
+                .Where(x => x.title.ToLower().Contains(input.ToLower()))
                 .OrderBy(x => x.title)
                 .ToList();
 

@@ -15,7 +15,7 @@
             using var context = new BookShopContext();
             DbInitializer.ResetDatabase(context);
 
-            string command = Console.ReadLine();
+            int command = int.Parse(Console.ReadLine());
 
             //Console.WriteLine(GetBooksByAgeRestriction(context, command));
             //Console.WriteLine(GetGoldenBooks(context));
@@ -25,7 +25,8 @@
             //Console.WriteLine(GetBooksReleasedBefore(context, command));
             //Console.WriteLine(GetAuthorNamesEndingIn(context, command));
             //Console.WriteLine(GetBookTitlesContaining(context, command));
-            Console.WriteLine(GetBooksByAuthor(context, command));
+            //Console.WriteLine(GetBooksByAuthor(context, command));
+            Console.WriteLine(CountBooks(context, command));
         }
 
         public static string GetBooksByAgeRestriction(BookShopContext context, string command)
@@ -230,6 +231,19 @@
             }
 
             return sb.ToString().TrimEnd();
+        }
+
+        public static int CountBooks(BookShopContext context, int lengthCheck)
+        {
+            var books = context.Books
+                .Select(x => new
+                {
+                    title = x.Title
+                })
+                .Where(x => x.title.Length > lengthCheck)
+                .ToList();
+
+            return books.Count();
         }
     }
 }

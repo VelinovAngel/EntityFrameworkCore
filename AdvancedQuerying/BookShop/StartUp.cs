@@ -15,7 +15,7 @@
             using var context = new BookShopContext();
             DbInitializer.ResetDatabase(context);
 
-            string command = Console.ReadLine();
+            string command = Console.ReadLine().ToLower();
 
             //Console.WriteLine(GetBooksByAgeRestriction(context, command));
             //Console.WriteLine(GetGoldenBooks(context));
@@ -23,7 +23,8 @@
             //Console.WriteLine(GetBooksNotReleasedIn(context, 1998));
             //Console.WriteLine(GetBooksByCategory(context, command));
             //Console.WriteLine(GetBooksReleasedBefore(context, command));
-            Console.WriteLine(GetAuthorNamesEndingIn(context, command));
+            //Console.WriteLine(GetAuthorNamesEndingIn(context, command));
+            Console.WriteLine(GetBookTitlesContaining(context, command));
         }
 
         public static string GetBooksByAgeRestriction(BookShopContext context, string command)
@@ -109,7 +110,7 @@
         {
             var command = input
                 .Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                .Select(x=>x.ToLower())
+                .Select(x => x.ToLower())
                 .ToArray();
 
             var books = context.Books
@@ -120,7 +121,7 @@
 
                 })
                 .Where(x => x.BookCategories.Any(x => command.Contains(x.Category.Name.ToLower())))
-                .OrderBy(x=>x.Title)
+                .OrderBy(x => x.Title)
                 .ToList();
 
             StringBuilder sb = new StringBuilder();
@@ -136,7 +137,7 @@
 
         public static string GetBooksReleasedBefore(BookShopContext context, string date)
         {
-  
+
             var books = context.Books
                 .Select(x => new
                 {
@@ -145,7 +146,7 @@
                     price = x.Price,
                     releaseDate = x.ReleaseDate
                 })
-                .Where(x => x.releaseDate.Value <DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture))
+                .Where(x => x.releaseDate.Value < DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture))
                 .OrderByDescending(x => x.releaseDate)
                 .ToList();
 
@@ -168,7 +169,7 @@
                 {
                     fullName = x.FirstName + " " + x.LastName
                 })
-                .OrderBy(x=>x.fullName)
+                .OrderBy(x => x.fullName)
                 .ToList();
 
             StringBuilder sb = new StringBuilder();
@@ -178,6 +179,28 @@
 
                 sb
                     .AppendLine(author.fullName);
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        public static string GetBookTitlesContaining(BookShopContext context, string input)
+        {
+            var books = context.Books
+                .Select(x => new
+                {
+                    title = x.Title
+                })
+                .Where(x => x.title.ToLower().Contains(input))
+                .OrderBy(x => x.title)
+                .ToList();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var book in books)
+            {
+                sb
+                    .AppendLine(book.title);
             }
 
             return sb.ToString().TrimEnd();

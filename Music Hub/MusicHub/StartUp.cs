@@ -16,7 +16,7 @@
 
             DbInitializer.ResetDatabase(context);
             //Console.WriteLine(ExportAlbumsInfo(context, 9));
-            Console.WriteLine(ExportSongsAboveDuration(context, 4));
+            Console.WriteLine(ExportAlbumsInfo(context, 9));
             //Test your solutions here
         }
 

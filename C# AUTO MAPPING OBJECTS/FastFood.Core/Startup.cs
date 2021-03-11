@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using AutoMapper;
 
 namespace FastFood.Core
 {
     using Data;
     using Microsoft.EntityFrameworkCore;
+    using System.Reflection;
 
     public class Startup
     {
@@ -30,6 +32,7 @@ namespace FastFood.Core
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddAutoMapper(Assembly.GetEntryAssembly());
             services.AddControllersWithViews();
         }
 

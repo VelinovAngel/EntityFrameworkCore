@@ -34,14 +34,20 @@
         {
             var employee = this.mapper.Map<Employee>(model);
 
-            context.Employees.Add(employee);
+            this.context.Employees.Add(employee);
 
-            context.SaveChanges();
+            this.context.SaveChanges();
+
+            return this.RedirectToAction("All", "Employees");
         }
 
         public IActionResult All()
         {
-            throw new NotImplementedException();
+            var employees = context.Employees
+                .ProjectTo<EmployeesAllViewModel>(mapper.ConfigurationProvider)
+                .ToList();
+
+            return this.View(employees);
         }
     }
 }

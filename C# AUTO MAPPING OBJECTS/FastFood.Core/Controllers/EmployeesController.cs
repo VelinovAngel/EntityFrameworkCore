@@ -5,6 +5,7 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Data;
+    using FastFood.Models;
     using Microsoft.AspNetCore.Mvc;
     using ViewModels.Employees;
 
@@ -31,7 +32,11 @@
         [HttpPost]
         public IActionResult Register(RegisterEmployeeInputModel model)
         {
-            throw new NotImplementedException();
+            var employee = this.mapper.Map<Employee>(model);
+
+            context.Employees.Add(employee);
+
+            context.SaveChanges();
         }
 
         public IActionResult All()

@@ -21,15 +21,31 @@ namespace ProductShop
 
             //string inputJsonUser = File.ReadAllText("../../../Datasets/users.json");
             //string inputJsonProduct = File.ReadAllText("../../../Datasets/products.json");
-            string inputJsonCategories = File.ReadAllText("../../../Datasets/categories.json");
+            //string inputJsonCategories = File.ReadAllText("../../../Datasets/categories.json");
+            string inputJsonCategories = File.ReadAllText("../../../Datasets/categories-products.json");
 
             //var resultUsers = ImportUsers(context, inputJsonUser);
             //var resultProduct = ImportProducts(context, inputJsonProduct);
-            var resultCategories = ImportCategories(context, inputJsonCategories);
+            //var resultCategories = ImportCategories(context, inputJsonCategories);
+            var resultCategoriesProducts = ImportCategoryProducts(context, inputJsonCategories);
 
-            Console.WriteLine(resultCategories);
+
+            Console.WriteLine(resultCategoriesProducts);
         }
+        public static string ImportCategoryProducts(ProductShopContext context, string inputJson)
+        {
+            var dtoCategoriesProducts = JsonConvert.DeserializeObject<IEnumerable<CategoriesAndProductsInputModel>>(inputJson);
 
+            InitializeAutoMapper();
+
+            var categoriesProducts = mapper.Map<IEnumerable<CategoryProduct>>(dtoCategoriesProducts);
+
+            context.AddRange(categoriesProducts);
+
+            context.SaveChanges();
+
+            return $"Successfully imported {categoriesProducts.Count()}";
+        }
         public static string ImportCategories(ProductShopContext context, string inputJson)
         {
             //Import the users from the provided file categories.json.Some of the names will be null, so you don’t have to add them in the database. Just skip the record and continue.

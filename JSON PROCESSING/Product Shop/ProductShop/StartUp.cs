@@ -19,12 +19,39 @@ namespace ProductShop
             //context.Database.EnsureDeleted();
             //context.Database.EnsureCreated();
 
-            string inputJsonUser = File.ReadAllText("../../../Datasets/users.json");
-            string inputJsonProduct = File.ReadAllText("../../../Datasets/products.json");
+            //string inputJsonUser = File.ReadAllText("../../../Datasets/users.json");
+            //string inputJsonProduct = File.ReadAllText("../../../Datasets/products.json");
+            string inputJsonCategories = File.ReadAllText("../../../Datasets/categories.json");
 
             //var resultUsers = ImportUsers(context, inputJsonUser);
-            var resultProduct = ImportProducts(context, inputJsonProduct);
-            Console.WriteLine(resultProduct);
+            //var resultProduct = ImportProducts(context, inputJsonProduct);
+            var resultCategories = ImportCategories(context, inputJsonCategories);
+
+            Console.WriteLine(resultCategories);
+        }
+
+        public static string ImportCategories(ProductShopContext context, string inputJson)
+        {
+            //Import the users from the provided file categories.json.Some of the names will be null, so you don’t have to add them in the database. Just skip the record and continue.
+            var dtoCategories = JsonConvert.DeserializeObject<IEnumerable<CategoryInputModel>>(inputJson);
+
+            InitializeAutoMapper();
+
+            var categories = mapper.Map<IEnumerable<Category>>(dtoCategories);
+
+            int count = 0;
+            foreach (var category in categories)
+            {
+                if (category.Name != null)
+                {
+                    context.Add(category);
+                    count++;
+                }
+            }
+
+            context.SaveChanges();
+
+            return $"Successfully imported {count}";
         }
 
         public static string ImportProducts(ProductShopContext context, string inputJson)

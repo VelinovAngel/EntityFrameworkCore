@@ -21,15 +21,47 @@ namespace CarDealer
 
             //string inputSuppliersFromJson = File.ReadAllText("../../../Datasets/suppliers.json");
             //string inputPartsFromJson = File.ReadAllText("../../../Datasets/parts.json");
-            string inputCarsFromJson = File.ReadAllText("../../../Datasets/cars.json");
+            //string inputCarsFromJson = File.ReadAllText("../../../Datasets/cars.json");
             //string inputCustomersFromJson = File.ReadAllText("../../../Datasets/customers.json");
+            //string inputSalesFromJson = File.ReadAllText("../../../Datasets/sales.json");
 
-            //var resultImportSuppliers = ImportSuppliers(context, inputSuppliersFromJson);
-            //var resultImportParts = ImportParts(context, inputPartsFromJson);
-            var resultImportCars = ImportParts(context, inputCarsFromJson);
-            //var resultCarsParts = ImportCustomers(context, inputCustomersFromJson);
+            var resultSales = GetOrderedCustomers(context);
 
-            Console.WriteLine(resultImportCars);
+
+            Console.WriteLine(resultSales);
+        }
+
+        public static string GetOrderedCustomers(CarDealerContext context)
+        {
+            var customers = context.Customers
+                .OrderBy(x => x.BirthDate)
+                .ThenBy(x => x.IsYoungDriver)
+                .Select(x => new
+                {
+                    Name = x.Name,
+                    BirthDate = x.BirthDate.ToString("dd/MM/yyyy"),
+                    IsYoungDriver = x.IsYoungDriver
+                })
+                .ToList();
+
+            var result = JsonConvert.SerializeObject(customers, Formatting.Indented);
+
+            return result;
+        }
+
+        public static string ImportSales(CarDealerContext context, string inputJson)
+        {
+            var dtoSales = JsonConvert.DeserializeObject<IEnumerable<SalesInputModel>>(inputJson);
+
+            InitializerAutoMapper();
+
+            var sales = mapper.Map<IEnumerable<Sale>>(dtoSales);
+
+            context.AddRange(sales);
+
+            context.SaveChanges();
+
+            return $"Successfully imported {sales.Count()}.";
         }
 
         public static string ImportCustomers(CarDealerContext context, string inputJson)
@@ -39,8 +71,8 @@ namespace CarDealer
             InitializerAutoMapper();
 
             var customers = mapper.Map<IEnumerable<Customer>>(dtoCustomers);
-            
-            
+
+
             context.AddRange(customers);
             context.SaveChanges();
 

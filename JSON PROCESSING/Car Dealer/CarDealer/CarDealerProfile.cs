@@ -18,6 +18,8 @@ namespace CarDealer
             this.CreateMap<CarsInputModel, Car>();
 
             this.CreateMap<CustomersInputModel, Customer>();
+
+            this.CreateMap<SalesInputModel, Sale>();
         }
     }
 }

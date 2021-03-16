@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CarDealer.DTO
 {
-    class PartsInputModel
+    public class PartsInputModel
     {
         public string Name { get; set; }
 

@@ -20,12 +20,68 @@ namespace CarDealer
             //context.Database.EnsureCreated();
 
             //string inputSuppliersFromJson = File.ReadAllText("../../../Datasets/suppliers.json");
-            string inputPartsFromJson = File.ReadAllText("../../../Datasets/parts.json");
+            //string inputPartsFromJson = File.ReadAllText("../../../Datasets/parts.json");
+            string inputCarsFromJson = File.ReadAllText("../../../Datasets/cars.json");
+            //string inputCustomersFromJson = File.ReadAllText("../../../Datasets/customers.json");
 
             //var resultImportSuppliers = ImportSuppliers(context, inputSuppliersFromJson);
-            var resultImportParts = ImportParts(context, inputPartsFromJson);
+            //var resultImportParts = ImportParts(context, inputPartsFromJson);
+            var resultImportCars = ImportParts(context, inputCarsFromJson);
+            //var resultCarsParts = ImportCustomers(context, inputCustomersFromJson);
 
-            Console.WriteLine(resultImportParts);
+            Console.WriteLine(resultImportCars);
+        }
+
+        public static string ImportCustomers(CarDealerContext context, string inputJson)
+        {
+            var dtoCustomers = JsonConvert.DeserializeObject<IEnumerable<CustomersInputModel>>(inputJson);
+
+            InitializerAutoMapper();
+
+            var customers = mapper.Map<IEnumerable<Customer>>(dtoCustomers);
+            
+            
+            context.AddRange(customers);
+            context.SaveChanges();
+
+
+            return $"Successfully imported {customers.Count()}.";
+        }
+
+        public static string ImportCars(CarDealerContext context, string inputJson)
+        {
+            var dtoCars = JsonConvert.DeserializeObject<IEnumerable<CarsInputModel>>(inputJson);
+
+            var cars = new List<Car>();
+            var carParts = new List<PartCar>();
+
+            foreach (var dtoCar in dtoCars)
+            {
+
+                var car = new Car()
+                {
+                    Make = dtoCar.Make,
+                    Model = dtoCar.Model,
+                    TravelledDistance = dtoCar.TravelledDistance
+                };
+
+                foreach (var part in dtoCar.PartsId.Distinct())
+                {
+                    var carPart = new PartCar()
+                    {
+                        PartId = part,
+                        Car = car
+                    };
+                    carParts.Add(carPart);
+                }
+                cars.Add(car);
+            }
+
+            context.Cars.AddRange(cars);
+            context.PartCars.AddRange(carParts);
+            context.SaveChanges();
+
+            return $"Successfully imported {cars.Count()}.";
         }
 
         public static string ImportParts(CarDealerContext context, string inputJson)

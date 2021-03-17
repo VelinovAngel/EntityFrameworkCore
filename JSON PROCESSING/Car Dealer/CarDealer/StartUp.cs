@@ -25,10 +25,28 @@ namespace CarDealer
             //string inputCustomersFromJson = File.ReadAllText("../../../Datasets/customers.json");
             //string inputSalesFromJson = File.ReadAllText("../../../Datasets/sales.json");
 
-            var result = GetCarsWithTheirListOfParts(context);
+            var result = GetTotalSalesByCustomer(context);
 
 
             Console.WriteLine(result);
+        }
+        public static string GetTotalSalesByCustomer(CarDealerContext context)
+        {
+            var customers = context.Customers
+                .Where(x => x.Sales.Count >= 1)
+                .Select(x => new
+                {
+                    fullName = x.Name,
+                    boughtCars = x.Sales.Count,
+                    spentMoney = x.Sales.Sum(s => s.Car.PartCars.Sum(d => d.Part.Price))
+                })
+                .OrderByDescending(x => x.spentMoney)
+                .ThenByDescending(x => x.boughtCars)
+                .ToList();
+
+            var toJson = JsonConvert.SerializeObject(customers, Formatting.Indented);
+
+            return toJson;
         }
 
         public static string GetCarsWithTheirListOfParts(CarDealerContext context)
@@ -205,6 +223,7 @@ namespace CarDealer
 
             return $"Successfully imported {parts.Count()}.";
         }
+
         public static string ImportSuppliers(CarDealerContext context, string inputJson)
         {
             var dtoSupplieres = JsonConvert.DeserializeObject<IEnumerable<SuppliersInputModel>>(inputJson);

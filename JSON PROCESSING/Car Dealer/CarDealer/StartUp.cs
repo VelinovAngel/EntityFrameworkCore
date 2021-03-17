@@ -25,10 +25,28 @@ namespace CarDealer
             //string inputCustomersFromJson = File.ReadAllText("../../../Datasets/customers.json");
             //string inputSalesFromJson = File.ReadAllText("../../../Datasets/sales.json");
 
-            var resultCars = GetCarsFromMakeToyota(context);
+            var resultSuppliers = GetLocalSuppliers(context);
 
 
-            Console.WriteLine(resultCars);
+            Console.WriteLine(resultSuppliers);
+        }
+
+        public static string GetLocalSuppliers(CarDealerContext context)
+        {
+            var suppliers = context.Suppliers
+                .Where(x=>x.IsImporter == false)
+                .Select(x => new
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    PartsCount = x.Parts.Count()
+                })
+                .ToList();
+
+            var suppliersResult = JsonConvert.SerializeObject(suppliers, Formatting.Indented);
+
+            return suppliersResult;
+
         }
 
         public static string GetCarsFromMakeToyota(CarDealerContext context)
@@ -43,6 +61,7 @@ namespace CarDealer
                     TravelledDistance = x.TravelledDistance
                 })
                 .OrderBy(x => x.Model)
+                .ThenByDescending(x => x.TravelledDistance)
                 .ToList();
 
             var carObject = JsonConvert.SerializeObject(cars, Formatting.Indented);

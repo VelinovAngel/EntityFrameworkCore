@@ -17,11 +17,33 @@ namespace CarDealer
             //dbContext.Database.EnsureDeleted();
             //dbContext.Database.EnsureCreated();
 
-            var xmlFile = File.ReadAllText("Datasets/parts.xml");
+            var xmlFile = File.ReadAllText("Datasets/customers.xml");
 
-            var result = ImportParts(dbContext, xmlFile);
+            var result = ImportCustomers(dbContext, xmlFile);
 
             Console.WriteLine(result);
+        }
+
+        public static string ImportCustomers(CarDealerContext context, string inputXml)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(CustomersInputModel[]), new XmlRootAttribute("Customers"));
+
+            var textReader = new StringReader(inputXml);
+
+            var dtoCustomers = (IEnumerable<CustomersInputModel>)xmlSerializer.Deserialize(textReader);
+
+            var result = dtoCustomers.Select(x => new Customer
+            {
+                Name = x.Name,
+                BirthDate = x.BirthDate,
+                IsYoungDriver = x.IsYoungDriver
+            })
+                .ToList();
+
+            context.AddRange(result);
+            context.SaveChanges();
+
+            return $"Successfully imported {result.Count}";
         }
 
         public static string ImportCars(CarDealerContext context, string inputXml)
@@ -32,15 +54,40 @@ namespace CarDealer
 
             var suppliersDto = (IEnumerable<CarInputModel>)xmlSerializer.Deserialize(textReader);
 
-            var result = suppliersDto.Select(x => new Car
+            var cars = new List<Car>();
+            var carParts = new List<PartCar>();
+
+            var allParts = context.Parts.Select(x => x.Id).ToList();
+
+            foreach (var dtoCar in suppliersDto)
             {
-                Make = x.Make,
-                Model = x.Model,
-                TravelledDistance = x.TravelledDistance,
+                var distinctedParts = dtoCar.CarPartsInputModel.Select(x => x.Id).Distinct();
+                var parts = distinctedParts.Intersect(allParts);
 
-            });
+                var car = new Car()
+                {
+                    Make = dtoCar.Make,
+                    Model = dtoCar.Model,
+                    TravelledDistance = dtoCar.TraveledDistance
+                };
 
-            return $"Successfully imported {0}";
+                foreach (var part in parts)
+                {
+                    var carPart = new PartCar()
+                    {
+                        PartId = part,
+                        Car = car
+                    };  
+                    carParts.Add(carPart);
+                }
+                cars.Add(car);
+            }
+
+            context.Cars.AddRange(cars);
+            context.PartCars.AddRange(carParts);
+            context.SaveChanges();
+
+            return $"Successfully imported {cars.Count}";
         }
 
         public static string ImportParts(CarDealerContext context, string inputXml)
@@ -63,7 +110,6 @@ namespace CarDealer
                     Price = x.Price,
                     Quantity = x.Quantity,
                     SupplierId = x.SupplierId
-
                 })
                 .ToList();
 

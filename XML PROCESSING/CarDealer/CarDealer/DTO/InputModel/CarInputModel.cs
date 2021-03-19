@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 namespace CarDealer.DTO.InputModel
 {
-    [XmlType("Cars")]
+    [XmlType("Car")]
     public class CarInputModel
     {
         [XmlElement("make")]
@@ -14,11 +14,11 @@ namespace CarDealer.DTO.InputModel
         [XmlElement("model")]
         public string Model { get; set; }
 
+        [XmlElement("TraveledDistance")]
+        public long TraveledDistance { get; set; }
 
-        public long TravelledDistance { get; set; }
-
-        [XmlElement("parts")]
-        public int[] Parts { get; set; }
+        [XmlArray("parts")]
+        public CarPartsInputModel[] CarPartsInputModel { get; set; }
 
     }
 }

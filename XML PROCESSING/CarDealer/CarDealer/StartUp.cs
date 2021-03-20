@@ -9,12 +9,14 @@ using CarDealer.DTO.InputModel;
 using System.Xml.Serialization;
 using CarDealer.DTO.OutputModel;
 using System.Collections.Generic;
-
+using AutoMapper;
 
 namespace CarDealer
 {
     public class StartUp
     {
+        static IMapper mapper;
+
         public static void Main(string[] args)
         {
             var dbContext = new CarDealerContext();
@@ -25,8 +27,33 @@ namespace CarDealer
 
             //var result = ImportSales(dbContext, xmlFile);
 
-            Console.WriteLine(GetCarsFromMakeBmw(dbContext));
+            Console.WriteLine(GetLocalSuppliers(dbContext));
         }
+        public static string GetLocalSuppliers(CarDealerContext context)
+        {
+
+            var suppliers = context.Suppliers
+                .Where(x => x.IsImporter == false)
+                .Select(x => new SuppliersOutputModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    PartsCount = x.Parts.Count()
+                })
+                .ToArray();
+
+            var streamWriter = new StringWriter();
+
+            var suppliersSerialized = new XmlSerializer(typeof(SuppliersOutputModel[]), new XmlRootAttribute("suppliers"));
+
+            var ns = new XmlSerializerNamespaces();
+            ns.Add("", "");
+
+            suppliersSerialized.Serialize(streamWriter, suppliers, ns);
+
+            return streamWriter.ToString();
+        }
+
         public static string GetCarsFromMakeBmw(CarDealerContext context)
         {
             var bmw = context.Cars
@@ -59,7 +86,7 @@ namespace CarDealer
                 .Where(x => x.TravelledDistance >= 2000000)
                 .OrderBy(x => x.Make)
                 .ThenBy(x => x.Model)
-                .Select(x=> new CarOutputModel
+                .Select(x => new CarOutputModel
                 {
                     Make = x.Make,
                     Model = x.Model,
@@ -220,6 +247,16 @@ namespace CarDealer
             context.SaveChanges();
 
             return $"Successfully imported {result.Count()}";
+        }
+
+        public static void InitializedAutomappe()
+        {
+            var config = new MapperConfiguration(cgf =>
+             {
+                 cgf.AddProfile<CarDealerProfile>();
+             });
+
+            mapper = config.CreateMapper();
         }
     }
 }

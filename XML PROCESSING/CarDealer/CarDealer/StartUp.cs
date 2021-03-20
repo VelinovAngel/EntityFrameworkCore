@@ -23,11 +23,37 @@ namespace CarDealer
             //dbContext.Database.EnsureDeleted();
             //dbContext.Database.EnsureCreated();
 
-            //ar xmlFile = File.ReadAllText("Datasets/sales.xml");
+            //var xmlFile = File.ReadAllText("Datasets/sales.xml");
 
             //var result = ImportSales(dbContext, xmlFile);
 
-            Console.WriteLine(GetCarsWithTheirListOfParts(dbContext));
+            Console.WriteLine(GetTotalSalesByCustomer(dbContext));
+        }
+
+        public static string GetTotalSalesByCustomer(CarDealerContext context)
+        {
+            //Get all customers that have bought at least 1 car and get their names, bought cars count and total spent money on cars.Order the result list by total spent money descending.
+            var customers = context.Customers
+                .Where(x => x.Sales.Count >= 1)
+                .Select(x => new CustomersOutputModel
+                {
+                    FullName = x.Name,
+                    BoughtCars = x.Sales.Count,
+                    SpentMoney = x.Sales.Sum(s => s.Car.PartCars.Sum(s => s.Part.Price))
+                })
+                .OrderByDescending(x => x.SpentMoney)
+                .ToArray();
+
+            var customerSerialized = new XmlSerializer(typeof(CustomersOutputModel[]), new XmlRootAttribute("customers"));
+
+            var ns = new XmlSerializerNamespaces();
+            ns.Add("", "");
+
+            var streamWriter = new StringWriter();
+
+            customerSerialized.Serialize(streamWriter, customers, ns);
+
+            return streamWriter.ToString();
         }
 
         public static string GetCarsWithTheirListOfParts(CarDealerContext context)
@@ -35,17 +61,17 @@ namespace CarDealer
             var carsAndTheirParts = context.Cars
                 .Select(x => new CarAndTheirPartsOutputModel
                 {
-                        Make = x.Make,
-                        Model = x.Model,
-                        TraveledDistance = x.TravelledDistance,
-                            Parts = x.PartCars.Select(p => new PartsOutputModel
-                            {
-                                Name = p.Part.Name,
-                                Price = p.Part.Price
-                            })
-                            .OrderByDescending(x=>x.Price)
+                    Make = x.Make,
+                    Model = x.Model,
+                    TraveledDistance = x.TravelledDistance,
+                    Parts = x.PartCars.Select(p => new PartsOutputModel
+                    {
+                        Name = p.Part.Name,
+                        Price = p.Part.Price
+                    })
+                            .OrderByDescending(x => x.Price)
                             .ToArray()
-                          
+
                 })
                 .OrderByDescending(x => x.TraveledDistance)
                 .ThenBy(x => x.Model)
@@ -63,6 +89,7 @@ namespace CarDealer
 
             return stremWriter.ToString();
         }
+
         public static string GetLocalSuppliers(CarDealerContext context)
         {
 

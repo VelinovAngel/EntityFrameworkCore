@@ -10,6 +10,10 @@ namespace ProductShop
         public ProductShopProfile()
         {
             this.CreateMap<UserInputModel, User>();
+
+            this.CreateMap<ProductInputModel, Product>();
+
+            this.CreateMap<CategorieInputModel, Category>();
         }
     }
 }

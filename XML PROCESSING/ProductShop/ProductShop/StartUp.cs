@@ -6,6 +6,9 @@ using System.Xml.Serialization;
 
 using ProductShop.Data;
 using ProductShop.Dtos.Import;
+using ProductShop.Models;
+using System.Collections;
+using System.Linq;
 
 namespace ProductShop
 {
@@ -15,16 +18,46 @@ namespace ProductShop
         public static void Main(string[] args)
         {
             var context = new ProductShopContext();
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
+            //context.Database.EnsureDeleted();
+            //context.Database.EnsureCreated();
 
-            var fileXml = File.ReadAllText(@"Datasets\users.xml");
-
-            var result = ImportUsers(context, fileXml);
-
+            var fileXml = File.ReadAllText(@"Datasets\categories.xml");
+  
+            var result = ImportCategories(context, fileXml);
             Console.WriteLine(result);
         }
 
+        public static string ImportCategories(ProductShopContext context, string inputXml)
+        {
+            InizializedAutomapper();
+
+            var xmlSerializer = new XmlSerializer(typeof(CategorieInputModel[]), new XmlRootAttribute("Categories"));
+
+            var categories = xmlSerializer.Deserialize(new StringReader(inputXml));
+
+            var categoryDto = mapper.Map<Category[]>(categories).Where(x => x.Name != null).ToArray();
+
+            context.Categories.AddRange(categoryDto);
+            context.SaveChanges();
+
+            return $"Successfully imported {categoryDto.Length}";
+        }
+        
+        public static string ImportProducts(ProductShopContext context, string inputXml)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(ProductInputModel[]), new XmlRootAttribute("Products"));
+
+            var products = xmlSerializer.Deserialize(new StringReader(inputXml));
+
+            InizializedAutomapper();
+
+            var productsDto = mapper.Map<Product[]>(products);
+
+            context.Products.AddRange(productsDto);
+            context.SaveChanges();
+
+            return $"Successfully imported {productsDto.Length}";
+        }
 
         public static string ImportUsers(ProductShopContext context, string inputXml)
         {
@@ -32,7 +65,14 @@ namespace ProductShop
 
             var usersDtos = xmlSerializer.Deserialize(new StringReader(inputXml));
 
-            return $"Successfully imported {0}";
+            InizializedAutomapper();
+
+            var usersMap = mapper.Map<User[]>(usersDtos);
+
+            context.Users.AddRange(usersMap);
+            context.SaveChanges();
+
+            return $"Successfully imported {usersMap.Length}";
         }
 
         public static void InizializedAutomapper()

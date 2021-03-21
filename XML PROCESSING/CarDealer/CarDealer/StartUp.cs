@@ -1,15 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
+using System.Collections.Generic;
 
+using AutoMapper;
 
 using CarDealer.Data;
 using CarDealer.Models;
 using CarDealer.DTO.InputModel;
-using System.Xml.Serialization;
 using CarDealer.DTO.OutputModel;
-using System.Collections.Generic;
-using AutoMapper;
 
 namespace CarDealer
 {

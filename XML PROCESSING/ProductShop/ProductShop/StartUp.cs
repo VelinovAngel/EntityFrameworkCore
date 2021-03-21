@@ -21,10 +21,26 @@ namespace ProductShop
             //context.Database.EnsureDeleted();
             //context.Database.EnsureCreated();
 
-            var fileXml = File.ReadAllText(@"Datasets\categories.xml");
+            var fileXml = File.ReadAllText(@"Datasets\categories-products.xml");
   
-            var result = ImportCategories(context, fileXml);
+            var result = ImportCategoryProducts(context, fileXml);
             Console.WriteLine(result);
+        }
+
+        public static string ImportCategoryProducts(ProductShopContext context, string inputXml)
+        {
+            var xmlSerialier = new XmlSerializer(typeof(CategoriesProductsInputModel[]), new XmlRootAttribute("CategoryProducts"));
+
+            InizializedAutomapper();
+
+            var categoriesProducts = xmlSerialier.Deserialize(new StringReader(inputXml));
+
+            var categoriesProductsDto = mapper.Map<CategoryProduct[]>(categoriesProducts);
+
+            context.CategoryProducts.AddRange(categoriesProductsDto);
+            context.SaveChanges();
+
+            return $"Successfully imported {categoriesProductsDto.Length}";
         }
 
         public static string ImportCategories(ProductShopContext context, string inputXml)

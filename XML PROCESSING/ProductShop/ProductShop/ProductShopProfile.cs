@@ -14,6 +14,8 @@ namespace ProductShop
             this.CreateMap<ProductInputModel, Product>();
 
             this.CreateMap<CategorieInputModel, Category>();
+
+            this.CreateMap<CategoriesProductsInputModel, CategoryProduct>();
         }
     }
 }

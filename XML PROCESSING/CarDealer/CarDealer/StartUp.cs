@@ -27,7 +27,38 @@ namespace CarDealer
 
             //var result = ImportSales(dbContext, xmlFile);
 
-            Console.WriteLine(GetTotalSalesByCustomer(dbContext));
+            Console.WriteLine(GetSalesWithAppliedDiscount(dbContext));
+        }
+
+        public static string GetSalesWithAppliedDiscount(CarDealerContext context)
+        {
+            var infoSales = context.Sales
+                .Select(x => new CarWithDiscoutOutputModel
+                {
+                    Car = new CarInfo
+                    {
+                        Make = x.Car.Make,
+                        Model = x.Car.Model,
+                        TraveledDistance = x.Car.TravelledDistance
+                    },
+                    Discount = x.Discount,
+                    CustomerName = x.Customer.Name,
+                    Price = x.Car.PartCars.Sum(s => s.Part.Price),
+                    PriceWithDiscount = x.Car.PartCars.Sum(s => s.Part.Price) 
+                                     - (x.Car.PartCars.Sum(s => s.Part.Price) * x.Discount / 100)
+                })
+                .ToArray();
+
+            var streamWriter = new StringWriter();
+
+            var salesSerialized = new XmlSerializer(typeof(CarWithDiscoutOutputModel[]), new XmlRootAttribute("sales"));
+
+            var ns = new XmlSerializerNamespaces();
+            ns.Add("", "");
+
+            salesSerialized.Serialize(streamWriter, infoSales, ns);
+
+            return streamWriter.ToString();
         }
 
         public static string GetTotalSalesByCustomer(CarDealerContext context)

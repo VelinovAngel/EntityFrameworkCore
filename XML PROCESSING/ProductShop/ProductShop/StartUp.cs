@@ -96,11 +96,11 @@ namespace ProductShop
         {
             var xmlSerializer = new XmlSerializer(typeof(CategoriesProductsInputModel[]), new XmlRootAttribute("CategoryProducts"));
 
-            InizializedAutomapper();
+            //InizializedAutomapper();
 
             var categoriesProducts = xmlSerializer.Deserialize(new StringReader(inputXml));
 
-            var categoriesProductsDto = mapper.Map<CategoryProduct[]>(categoriesProducts);
+            var categoriesProductsDto = Mapper.Map<CategoryProduct[]>(categoriesProducts);
 
             context.CategoryProducts.AddRange(categoriesProductsDto);
             context.SaveChanges();

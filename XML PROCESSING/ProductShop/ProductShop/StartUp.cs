@@ -30,6 +30,10 @@ namespace ProductShop
             //var result = ImportCategoryProducts(context, fileXml);
             Console.WriteLine(GetSoldProducts(context));
         }
+        public static string GetCategoriesByProductsCount(ProductShopContext context)
+        {
+
+        }
 
         public static string GetSoldProducts(ProductShopContext context)
         {

@@ -23,6 +23,8 @@ namespace ProductShop
             //context.Database.EnsureDeleted();
             //context.Database.EnsureCreated();
 
+            Mapper.Initialize(cfg => cfg.AddProfile<ProductShopProfile>());
+
             //var fileXml = File.ReadAllText(@"Datasets\categories-products.xml");
 
             //var result = ImportCategoryProducts(context, fileXml);
@@ -110,13 +112,13 @@ namespace ProductShop
 
         public static string ImportCategories(ProductShopContext context, string inputXml)
         {
-            InizializedAutomapper();
+           // InizializedAutomapper();
 
             var xmlSerializer = new XmlSerializer(typeof(CategorieInputModel[]), new XmlRootAttribute("Categories"));
 
             var categories = xmlSerializer.Deserialize(new StringReader(inputXml));
 
-            var categoryDto = mapper.Map<Category[]>(categories).Where(x => x.Name != null).ToArray();
+            var categoryDto = Mapper.Map<Category[]>(categories).Where(x => x.Name != null).ToArray();
 
             context.Categories.AddRange(categoryDto);
             context.SaveChanges();
@@ -130,7 +132,7 @@ namespace ProductShop
 
             var products = xmlSerializer.Deserialize(new StringReader(inputXml));
 
-            InizializedAutomapper();
+            //InizializedAutomapper();
 
             var productsDto = mapper.Map<Product[]>(products);
 
@@ -158,8 +160,6 @@ namespace ProductShop
 
         public static void InizializedAutomapper()
         {
-
-            Mapper.Initialize(cfg => cfg.AddProfile<ProductShopProfile>());
             //var automapper = new MapperConfiguration(cgf =>
             //{
             //    cgf.AddProfile<ProductShopProfile>();

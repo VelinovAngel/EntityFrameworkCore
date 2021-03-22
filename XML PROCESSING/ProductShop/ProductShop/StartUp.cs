@@ -28,11 +28,33 @@ namespace ProductShop
             //var fileXml = File.ReadAllText(@"Datasets\categories-products.xml");
 
             //var result = ImportCategoryProducts(context, fileXml);
-            Console.WriteLine(GetSoldProducts(context));
+            Console.WriteLine(GetCategoriesByProductsCount(context));
         }
         public static string GetCategoriesByProductsCount(ProductShopContext context)
         {
+            var categories = context.Categories
+                .Select(x => new CategoriesOutputModel
+                {
+                    Name = x.Name,
+                    Count = x.CategoryProducts.Count,
+                    AveragePrice = x.CategoryProducts.Average(p => p.Product.Price),
+                    TotalRevenue = x.CategoryProducts.Sum(p => p.Product.Price)
 
+                })
+                .OrderByDescending(x => x.Count)
+                .ThenBy(x => x.TotalRevenue)
+                .ToArray();
+
+            var xmlSerializer = new XmlSerializer(typeof(CategoriesOutputModel[]), new XmlRootAttribute("Categories"));
+
+            var ns = new XmlSerializerNamespaces();
+            ns.Add(string.Empty, string.Empty);
+
+            var stringWriter = new StringWriter();
+
+            xmlSerializer.Serialize(stringWriter, categories, ns);
+
+            return stringWriter.ToString();
         }
 
         public static string GetSoldProducts(ProductShopContext context)

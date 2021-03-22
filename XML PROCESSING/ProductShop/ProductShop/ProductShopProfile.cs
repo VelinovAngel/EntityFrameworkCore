@@ -22,6 +22,8 @@ namespace ProductShop
             //Export Models
 
             this.CreateMap<Product, ProductOutputModel>();
+
+            this.CreateMap<Category, CategoriesOutputModel>();
         }
     }
 }

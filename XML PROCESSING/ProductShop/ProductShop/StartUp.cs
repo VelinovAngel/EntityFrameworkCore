@@ -134,7 +134,7 @@ namespace ProductShop
 
             //InizializedAutomapper();
 
-            var productsDto = mapper.Map<Product[]>(products);
+            var productsDto = Mapper.Map<Product[]>(products);
 
             context.Products.AddRange(productsDto);
             context.SaveChanges();

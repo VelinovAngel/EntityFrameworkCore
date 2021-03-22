@@ -148,9 +148,9 @@ namespace ProductShop
 
             var usersDtos = xmlSerializer.Deserialize(new StringReader(inputXml));
 
-            InizializedAutomapper();
+            //InizializedAutomapper();
 
-            var usersMap = mapper.Map<User[]>(usersDtos);
+            var usersMap = Mapper.Map<User[]>(usersDtos);
 
             context.Users.AddRange(usersMap);
             context.SaveChanges();

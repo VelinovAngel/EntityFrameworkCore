@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ProductShop.DateDTO
+﻿namespace ProductShop.DateDTO
 {
     public class UserInputModel
     {

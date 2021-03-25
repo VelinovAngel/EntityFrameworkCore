@@ -1,13 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using AutoMapper;
+using System.Linq;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+
+
 using ProductShop.Data;
 using ProductShop.DateDTO;
 using ProductShop.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace ProductShop
 {

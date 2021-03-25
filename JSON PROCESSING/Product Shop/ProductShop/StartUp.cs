@@ -187,7 +187,6 @@ namespace ProductShop
             context.SaveChanges();
 
             return $"Successfully imported {products.Count()}";
-
         }
 
         public static string ImportUsers(ProductShopContext context, string inputJson)

@@ -1,7 +1,6 @@
 ﻿namespace ProductShop.Models
 {
     using System.Collections.Generic;
-
     public class Category
     {
         public Category()

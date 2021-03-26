@@ -1,13 +1,15 @@
 ﻿namespace VaporStore.DataProcessor
 {
+    using Data;
     using System;
+    using System.Text;
+    using System.Linq;
+
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Globalization;
-    using System.Linq;
-    using System.Text;
-    using Data;
     using Newtonsoft.Json;
+
     using VaporStore.Data.Models;
     using VaporStore.ImportResults;
 
@@ -17,7 +19,7 @@
         {
             StringBuilder sb = new StringBuilder();
 
-            var games = JsonConvert.DeserializeObject<ImportGameDTO[]>(jsonString);
+            var games = JsonConvert.DeserializeObject<IEnumerable<ImportGameDTO>>(jsonString);
             var gameCollection = new List<Game>();
 
             //var gamesDTO = AutoMapper.Mapper.Map<Game>(games);
@@ -100,7 +102,20 @@
 
         public static string ImportUsers(VaporStoreDbContext context, string jsonString)
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+
+            var usersDto = JsonConvert.DeserializeObject<IEnumerable<ImportUserDTO>>(jsonString);
+
+
+            foreach (var user in usersDto)
+            {
+                if (!IsValid(user))
+                {
+                    sb.AppendLine("Invalid Data");
+                }
+            }
+
+            return sb.ToString().TrimEnd();
         }
 
         public static string ImportPurchases(VaporStoreDbContext context, string xmlString)

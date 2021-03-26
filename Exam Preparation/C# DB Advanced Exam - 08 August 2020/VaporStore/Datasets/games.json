@@ -45,20 +45,20 @@
 		"Tags": []
 	},
 	{
-		"Name": "Dota 2",
-		"Price": 0,
-		"ReleaseDate": "2013-07-09",
-		"Developer": "Valve",
-		"Genre": "Action",
-		"Tags": [
-			"Multi-player",
-			"Co-op",
-			"Steam Trading Cards",
-			"Steam Workshop",
-			"SteamVR Collectibles",
-			"In-App Purchases",
-			"Valve Anti-Cheat enabled"
-		]
+			"Name": "Dota 2",
+			"Price": 0,
+			"ReleaseDate": "2013-07-09",
+			"Developer": "Valve",
+			"Genre": "Action",
+			"Tags": [
+				"Multi-player",
+				"Co-op",
+				"Steam Trading Cards",
+				"Steam Workshop",
+				"SteamVR Collectibles",
+				"In-App Purchases",
+				"Valve Anti-Cheat enabled"
+			]
 	},
 	{
 		"Name": "MONSTER HUNTER: WORLD",

@@ -9,7 +9,7 @@
 	{
 		public static string ImportGames(VaporStoreDbContext context, string jsonString)
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public static string ImportUsers(VaporStoreDbContext context, string jsonString)

@@ -45,7 +45,8 @@ namespace CarDealer
                     customerName = x.Customer.Name,
                     Discount = x.Discount.ToString("f2"),
                     price = x.Car.PartCars.Sum(g => g.Part.Price).ToString("f2"),
-                    priceWithDiscount = (x.Car.PartCars.Sum(p => p.Part.Price) - x.Car.PartCars.Sum(p => p.Part.Price) * x.Discount / 100).ToString("f2")
+                    priceWithDiscount = (x.Car.PartCars.Sum(p => p.Part.Price) -
+                                         x.Car.PartCars.Sum(p => p.Part.Price) * x.Discount / 100).ToString("f2")
 
                 })
                 .Take(10)

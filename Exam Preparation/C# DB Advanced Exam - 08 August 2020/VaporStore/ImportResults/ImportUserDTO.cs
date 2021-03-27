@@ -4,8 +4,8 @@ namespace VaporStore.ImportResults
 {
     public class ImportUserDTO
     {
-        
-        [RegularExpression(@"^[A-Z]{1}[a-z]+ [A-Z]{1}[a-z]+$")]
+        [Required]
+        [RegularExpression("^[A-Z][a-z]+ [A-Z][a-z]+$")]
         public string FullName { get; set; }
 
         [Required]
@@ -15,7 +15,7 @@ namespace VaporStore.ImportResults
         [Required]
         public string Email { get; set; }
 
-        [Range(3, 20)]
+        [Range(3, 103)]
         public int Age { get; set; }
 
         public CardsDTO[] Cards { get; set; }

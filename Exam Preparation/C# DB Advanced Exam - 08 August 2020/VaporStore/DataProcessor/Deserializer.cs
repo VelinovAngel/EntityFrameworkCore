@@ -2,6 +2,7 @@
 {
     using Data;
     using System;
+    using System.IO;
     using System.Text;
     using System.Linq;
 
@@ -12,6 +13,8 @@
 
     using VaporStore.Data.Models;
     using VaporStore.ImportResults;
+    using VaporStore.Data.Models.Enums;
+    using System.Xml.Serialization;
 
     public static class Deserializer
     {
@@ -48,8 +51,8 @@
                 foreach (var tag in gameDTO.Tags)
                 {
                     var tags = GetTag(context, tag);
-                    
-                    game.GameTags.Add(new GameTag { Game = game , Tag = tags });
+
+                    game.GameTags.Add(new GameTag { Game = game, Tag = tags });
                 }
                 gameCollection.Add(game);
                 sb.AppendLine($"Added {game.Name} ({game.Genre.Name}) with {game.GameTags.Count} tags");
@@ -106,21 +109,118 @@
 
             var usersDto = JsonConvert.DeserializeObject<IEnumerable<ImportUserDTO>>(jsonString);
 
+            List<User> users = new List<User>();
 
-            foreach (var user in usersDto)
+            foreach (var userDTO in usersDto)
             {
-                if (!IsValid(user))
+
+                if (!IsValid(userDTO) || !userDTO.Cards.All(IsValid))
                 {
                     sb.AppendLine("Invalid Data");
+                    continue;
                 }
+
+
+                bool isValidEnum = false;
+
+                var currUser = new User
+                {
+                    Username = userDTO.Username,
+                    FullName = userDTO.FullName,
+                    Email = userDTO.Email,
+                    Age = userDTO.Age
+                };
+
+                foreach (var card in userDTO.Cards)
+                {
+
+                    bool isParsed = Enum.TryParse<CardType>(card.Type, out CardType result);
+                    if (!isParsed)
+                    {
+                        isValidEnum = true;
+                        break;
+                    }
+
+                    if (isValidEnum)
+                    {
+                        sb.AppendLine("Invalid Data");
+                        continue;
+                    }
+
+
+                    currUser.Cards.Add(new Card
+                    {
+                        Number = card.Number,
+                        Cvc = card.CVC,
+                        Type = Enum.Parse<CardType>(card.Type)
+                    });
+                }
+
+                users.Add(currUser);
+                sb.AppendLine($"Imported {userDTO.Username} with {userDTO.Cards.Count()} cards");
             }
+
+            context.Users.AddRange(users);
+            context.SaveChanges();
 
             return sb.ToString().TrimEnd();
         }
 
         public static string ImportPurchases(VaporStoreDbContext context, string xmlString)
         {
-            throw new NotImplementedException();
+            var xmlSerializer = new XmlSerializer(typeof(InputPurchaseDTO[]), new XmlRootAttribute("Purchases"));
+
+            var streanWriter = new StringReader(xmlString);
+
+            var purchasesDTO = (IEnumerable<InputPurchaseDTO>)xmlSerializer.Deserialize(streanWriter);
+
+            StringBuilder sb = new StringBuilder();
+
+            List<Purchase> purchases = new List<Purchase>();
+
+            foreach (var purchaseDTO in purchasesDTO)
+            {
+                if (!IsValid(purchaseDTO))
+                {
+                    sb.AppendLine("Invalid Data");
+                    continue;
+                }
+
+                var isValidEnum = Enum.TryParse<PurchaseType>(purchaseDTO.Type, out PurchaseType purchaseType);
+
+                if (!isValidEnum)
+                {
+                    sb.AppendLine("Invalid Data");
+                    continue;
+                }
+
+                var game = context.Games.FirstOrDefault(x => x.Name == purchaseDTO.Title);
+                var card = context.Cards.FirstOrDefault(x => x.Number == purchaseDTO.Card);
+
+                if (game == null || card == null)
+                {
+                    sb.AppendLine("Invalid Data");
+                    continue;
+                }
+
+                var purchase = new Purchase
+                {
+                    Type = purchaseType,
+                    ProductKey = purchaseDTO.ProductKey,
+                    Card = card,
+                    Game = game,
+                    Date = DateTime.ParseExact(purchaseDTO.Date, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture)
+                };
+
+                //var user = context.Users.FirstOrDefault(x => x.Cards.Contains(card));
+                purchases.Add(purchase);
+                sb.AppendLine($"Imported {purchase.Game.Name} for {purchase.Card.User.Username}");
+            }
+
+            context.Purchases.AddRange(purchases);
+            context.SaveChanges();
+
+            return sb.ToString().TrimEnd();
         }
 
         private static bool IsValid(object dto)

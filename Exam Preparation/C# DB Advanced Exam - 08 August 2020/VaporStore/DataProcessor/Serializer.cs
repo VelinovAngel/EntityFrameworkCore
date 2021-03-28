@@ -54,34 +54,41 @@
         {
             var purchaseType = Enum.Parse<PurchaseType>(storeType);
 
-            var users = context.Users
-                 .ToArray()
-                 .Where(x => x.Cards.SelectMany(p => p.Purchases).Any(t => t.Type == purchaseType))
-                 .Select(x => new ExportUserDTO
-                 {
-                     Username = x.Username,
-                     Purchases = x.Cards.SelectMany(p => p.Purchases).Select(c => new ExportPurchaseDTO
-                     {
-                         Card = c.Card.Number,
-                         CVC = c.Card.Cvc,
-                         Date = c.Date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
-                         Game = new ExportGameDTO
-                         {
-                             Genre = c.Game.Genre.Name,
-                             Title = c.Game.Name,
-                             Price = c.Game.Price
-                         }
-                     })
-                     .OrderBy(p => p.Date)
-                     .ToArray(),
-                                TotalSpent = x.Cards.SelectMany(p => p.Purchases)
-                     .Sum(p => p.Game.Price)
-                 })
-                 .Where(u => u.Purchases.Length > 0)
+            var users = context
+                .Users
+                .ToArray()
+                .Where(u => u.Cards.Any(c => c.Purchases.Any()))
+                .Select(u => new ExportUserDTO()
+                {
+                    Username = u.Username,
+                    Purchases = context
+                        .Purchases
+                        .ToArray()
+                        .Where(p => p.Card.User.Username == u.Username && p.Type == purchaseType)
+                        .OrderBy(p => p.Date)
+                        .Select(p => new ExportPurchaseDTO()
+                        {
+                            Card = p.Card.Number,
+                            CVC = p.Card.Cvc,
+                            Date = p.Date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
+                            Game = new ExportGameDTO()
+                            { 
+                                Title = p.Game.Name,
+                                Genre = p.Game.Genre.Name,
+                                Price = p.Game.Price
+                            }
+                        })
+                        .ToArray(),
+                    TotalSpent = context
+                        .Purchases
+                        .ToArray()
+                        .Where(p => p.Card.User.Username == u.Username && p.Type == purchaseType)
+                        .Sum(p => p.Game.Price)
+                })
+                .Where(u => u.Purchases.Any())
                 .OrderByDescending(u => u.TotalSpent)
                 .ThenBy(u => u.Username)
                 .ToArray();
-
 
             var xmlSerializer = new XmlSerializer(typeof(ExportUserDTO[]),new XmlRootAttribute("Users"));
 

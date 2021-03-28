@@ -35,9 +35,11 @@
             builder.Entity<OfficerPrisoner>(entity =>
             {
                 entity.HasKey(x => new { x.OfficerId, x.PrisonerId });
+
                 entity.HasOne(p => p.Prisoner)
                       .WithMany(p => p.PrisonerOfficers)
                       .HasForeignKey(p => p.PrisonerId);
+
                 entity.HasOne(p => p.Officer)
                       .WithMany(p => p.OfficerPrisoners)
                       .HasForeignKey(p => p.OfficerId);

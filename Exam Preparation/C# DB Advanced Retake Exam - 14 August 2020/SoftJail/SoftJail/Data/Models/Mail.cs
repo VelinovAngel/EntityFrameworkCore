@@ -8,7 +8,7 @@ namespace SoftJail.Data.Models
         //•	Id – integer, Primary Key
 
         [Required]
-        public int Description { get; set; }
+        public string Description { get; set; }
         //•	Description– text(required)
 
         [Required]

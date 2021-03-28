@@ -38,8 +38,8 @@ namespace SoftJail.Data.Models
         public DateTime? ReleaseDate { get; set; }
         //•	ReleaseDate– Date
 
-        [RangeAttribute(typeof(decimal), "0", "79228162514264337593543950335")]
-        public decimal Bail { get; set; }
+        [Range(typeof(decimal), "0", "79228162514264337593543950335")]
+        public decimal? Bail { get; set; }
         //•	Bail– decimal (non-negative, minimum value: 0)
 
         public int? CellId { get; set; }

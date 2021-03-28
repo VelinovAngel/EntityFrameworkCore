@@ -1,7 +1,8 @@
 ﻿namespace SoftJail.Data
 {
     using Microsoft.EntityFrameworkCore;
-    using SoftJail.Data.Models;
+
+    using Models;
 
     public class SoftJailDbContext : DbContext
     {
@@ -14,12 +15,17 @@
         {
         }
 
-        public DbSet<Cell> Cells { get; set; }
-        public DbSet<Department> Departments { get; set; }
-        public DbSet<Mail> Mails { get; set; }
-        public DbSet<Officer> Officers { get; set; }
-        public DbSet<OfficerPrisoner> OfficersPrisoners { get; set; }
         public DbSet<Prisoner> Prisoners { get; set; }
+
+        public DbSet<Cell> Cells { get; set; }
+
+        public DbSet<Officer> Officers { get; set; }
+
+        public DbSet<Mail> Mails { get; set; }
+
+        public DbSet<Department> Departments { get; set; }
+
+        public DbSet<OfficerPrisoner> OfficersPrisoners { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -34,16 +40,13 @@
         {
             builder.Entity<OfficerPrisoner>(entity =>
             {
-                entity.HasKey(x => new { x.PrisonerId, x.OfficerId });
+                entity.HasKey(op => new { op.PrisonerId, op.OfficerId });
 
-                entity.HasOne(p => p.Prisoner)
-                      .WithMany(p => p.PrisonerOfficers)
-                      .HasForeignKey(p => p.PrisonerId);
-
-                entity.HasOne(p => p.Officer)
-                      .WithMany(p => p.OfficerPrisoners)
-                      .HasForeignKey(p => p.OfficerId);
-
+                entity
+                    .HasOne(op => op.Prisoner)
+                    .WithMany(p => p.PrisonerOfficers)
+                    .HasForeignKey(op => op.PrisonerId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }

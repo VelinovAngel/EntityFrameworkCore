@@ -225,6 +225,15 @@ namespace ProductShop
 
             var usersMap = Mapper.Map<User[]>(usersDtos);
 
+            //var userTest = usersDtos
+            //    .Select(x => new User
+            //    {
+            //        FirstName = x.FirstName,
+            //        LastName = x.LastName,
+            //        Age = x.Age
+            //    })
+            //    .ToArray();
+
             context.Users.AddRange(usersMap);
             context.SaveChanges();
 

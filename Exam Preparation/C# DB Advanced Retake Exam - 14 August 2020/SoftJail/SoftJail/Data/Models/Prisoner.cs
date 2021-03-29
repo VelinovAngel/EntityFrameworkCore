@@ -32,7 +32,7 @@ namespace SoftJail.Data.Models
         //•	Age – integer in the range[18, 65] (required)
 
         [Required]
-        public DateTime IncarcerationDate { get; set; }
+        public DateTime? IncarcerationDate { get; set; }
         //•	IncarcerationDate ¬– Date(required)
 
         public DateTime? ReleaseDate { get; set; }

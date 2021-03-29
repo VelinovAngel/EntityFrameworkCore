@@ -10,22 +10,23 @@
     {
         public static string ImportDepartmentsCells(SoftJailDbContext context, string jsonString)
         {
-            throw new NotImplementedException();
+            //TODO: NB
+            return "TODO";
         }
 
         public static string ImportPrisonersMails(SoftJailDbContext context, string jsonString)
         {
-            throw new NotImplementedException();
+            return "TODO";
         }
 
         public static string ImportOfficersPrisoners(SoftJailDbContext context, string xmlString)
         {
-            throw new NotImplementedException();
+            return "TODO";
         }
 
         private static bool IsValid(object obj)
         {
-            var validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(obj);
+            var validationContext = new ValidationContext(obj);
             var validationResult = new List<ValidationResult>();
 
             bool isValid = Validator.TryValidateObject(obj, validationContext, validationResult, true);

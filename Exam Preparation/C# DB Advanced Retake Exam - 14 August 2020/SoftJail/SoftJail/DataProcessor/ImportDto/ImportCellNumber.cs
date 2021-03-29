@@ -5,7 +5,7 @@ namespace SoftJail.DataProcessor.ImportDto
     public class ImportCellNumber
     {
         [Required]
-        [Range(0, 1000)]
+        [Range(1, 1000)]
         public int CellNumber { get; set; }
 
         [Required]

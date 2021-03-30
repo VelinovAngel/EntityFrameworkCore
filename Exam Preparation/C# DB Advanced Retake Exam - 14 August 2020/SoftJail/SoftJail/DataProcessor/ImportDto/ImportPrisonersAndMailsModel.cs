@@ -13,7 +13,6 @@ namespace SoftJail.DataProcessor.ImportDto
         [RegularExpression(@"^The [A-Z][a-z]+$")]
         public string Nickname { get; set; }
 
-        [Required]
         [Range(18, 65)]
         public int Age { get; set; }
 

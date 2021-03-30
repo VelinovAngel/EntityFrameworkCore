@@ -8,6 +8,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
 
@@ -44,13 +45,49 @@
                 context.SaveChanges();
                 result.AppendLine($"Imported {department.Name} with {department.Cells.Count} cells");
             }
-            
+
             return result.ToString().TrimEnd();
         }
 
         public static string ImportPrisonersMails(SoftJailDbContext context, string jsonString)
         {
-            return "TODO";
+            var result = new StringBuilder();
+
+            var prisonersDto = JsonConvert.DeserializeObject<IEnumerable<ImportPrisonersAndMailsModel>>(jsonString);
+
+            foreach (var prisonerJs in prisonersDto)
+            {
+                if (!IsValid(prisonerJs) || !prisonerJs.Mails.All(IsValid))
+                {
+                    result.AppendLine("Invalid Data");
+                    continue;
+                }
+
+                var prisoner = new Prisoner
+                {
+                    FullName = prisonerJs.FullName,
+                    Nickname = prisonerJs.Nickname,
+                    Age = prisonerJs.Age,
+                    IncarcerationDate = DateTime.ParseExact(prisonerJs.IncarcerationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                    ReleaseDate = DateTime.TryParseExact(prisonerJs.ReleaseDate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date) ? date : (DateTime?)null,
+                    Bail = prisonerJs.Bail,
+                    CellId = prisonerJs.CellId,
+                    Mails = prisonerJs.Mails
+                                        .Select(m => new Mail
+                                        {
+                                            Address = m.Address,
+                                            Description = m.Description,
+                                            Sender = m.Sender
+                                        }).ToArray()
+                };
+
+                context.Prisoners.Add(prisoner);
+                context.SaveChanges();
+                result.AppendLine($"Imported {prisoner.FullName} {prisoner.Age} years old");
+            }
+
+
+            return result.ToString().TrimEnd();
         }
 
         public static string ImportOfficersPrisoners(SoftJailDbContext context, string xmlString)

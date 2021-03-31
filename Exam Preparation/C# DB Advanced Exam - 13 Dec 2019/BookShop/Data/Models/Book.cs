@@ -25,7 +25,7 @@ namespace BookShop.Data.Models
         public Genre Genre { get; set; }
         //•	Genre - enumeration of type Genre, with possible values(Biography = 1, Business = 2, Science = 3) (required)
 
-        //[Range(0.01, double.MaxValue)]
+        [Range(0.01, double.MaxValue)]
         public decimal Price { get; set; }
         //•	Price - decimal in range between 0.01 and max value of the decimal
 

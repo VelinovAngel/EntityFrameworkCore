@@ -15,12 +15,12 @@
     {
         public static string ExportMostCraziestAuthors(BookShopContext context)
         {
-            throw new NotImplementedException();
+            return "TODO";
         }
 
         public static string ExportOldestBooks(BookShopContext context, DateTime date)
         {
-            throw new NotImplementedException();
+            return "TODO";
         }
     }
 }

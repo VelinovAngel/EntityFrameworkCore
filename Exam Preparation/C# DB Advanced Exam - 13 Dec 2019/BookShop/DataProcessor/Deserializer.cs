@@ -8,6 +8,7 @@
     using System.Linq;
     using System.Text;
     using System.Xml.Serialization;
+    using BookShop.DataProcessor.ImportDto;
     using Data;
     using Newtonsoft.Json;
     using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
@@ -24,12 +25,25 @@
 
         public static string ImportBooks(BookShopContext context, string xmlString)
         {
-           throw new NotImplementedException();
+            var result = new StringBuilder();
+
+            var xmlSerializer = new XmlSerializer(typeof(ImportBooksModel[]), new XmlRootAttribute("Books"));
+
+            var stringReader = new StringReader(xmlString);
+
+            var booksDto = (IEnumerable<ImportBooksModel>)xmlSerializer.Deserialize(stringReader);
+
+            foreach (var item in collection)
+            {
+
+            }
+
+            return result.ToString().TrimEnd();
         }
 
         public static string ImportAuthors(BookShopContext context, string jsonString)
         {
-            throw new NotImplementedException();
+            return "TODO";
         }
 
         private static bool IsValid(object dto)

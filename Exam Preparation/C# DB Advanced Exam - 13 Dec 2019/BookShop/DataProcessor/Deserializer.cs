@@ -8,10 +8,12 @@
     using System.Linq;
     using System.Text;
     using System.Xml.Serialization;
+    using BookShop.Data.Models;
+    using BookShop.Data.Models.Enums;
     using BookShop.DataProcessor.ImportDto;
     using Data;
     using Newtonsoft.Json;
-    using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
+
 
     public class Deserializer
     {
@@ -33,9 +35,26 @@
 
             var booksDto = (IEnumerable<ImportBooksModel>)xmlSerializer.Deserialize(stringReader);
 
-            foreach (var item in collection)
+            foreach (var currBook in booksDto)
             {
+                if (!IsValid(currBook))
+                {
+                    result.AppendLine(ErrorMessage);
+                    continue;
+                }
 
+                var book = new Book
+                {
+                    Name = currBook.Name,
+                    Genre = (Genre)currBook.Genre,
+                    Pages = currBook.Pages,
+                    Price = currBook.Price,
+                    PublishedOn = DateTime.ParseExact(currBook.PublishedOn.ToString(), "MM/dd/yyyy", CultureInfo.InvariantCulture)
+                };
+
+                context.Books.Add(book);
+                context.SaveChanges();
+                result.AppendLine(string.Format(SuccessfullyImportedBook, currBook.Name, currBook.Price));
             }
 
             return result.ToString().TrimEnd();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations; 
 
 namespace BookShop.Data.Models
@@ -22,6 +23,7 @@ namespace BookShop.Data.Models
         public string LastName { get; set; }
         //•	LastName - text with length[3, 30]. (required)
 
+        [Required]
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
         public string Email { get; set; }
@@ -32,6 +34,7 @@ namespace BookShop.Data.Models
         public string Phone { get; set; }
         //•	Phone - text.Consists only of three groups(separated by '-'), the first two consist of three digits and the last one - of 4 digits. (required)
 
+        [JsonIgnore]
         public ICollection<AuthorBook> AuthorsBooks { get; set; }
         //•	AuthorsBooks - collection of type AuthorBook
     }

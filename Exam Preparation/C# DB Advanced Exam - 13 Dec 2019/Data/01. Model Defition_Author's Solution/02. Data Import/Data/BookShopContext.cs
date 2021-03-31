@@ -1,7 +1,7 @@
 ﻿namespace BookShop.Data
 {
-    using BookShop.Data.Models;
     using Microsoft.EntityFrameworkCore;
+    using Models;
 
     public class BookShopContext : DbContext
     {
@@ -11,7 +11,9 @@
             : base(options) { }
 
         public DbSet<Author> Authors { get; set; }
+
         public DbSet<AuthorBook> AuthorsBooks { get; set; }
+
         public DbSet<Book> Books { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -26,11 +28,7 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AuthorBook>()
-                .HasKey(x => new 
-                { 
-                    x.AuthorId, 
-                    x.BookId 
-                });
+                .HasKey(k => new { k.AuthorId, k.BookId });
         }
     }
 }

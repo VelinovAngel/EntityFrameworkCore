@@ -15,7 +15,28 @@
     {
         public static string ExportMostCraziestAuthors(BookShopContext context)
         {
-            return "TODO";
+            var authorsJson = context.Authors
+                .ToList()
+                .Select(x => new
+                {
+                    AuthorName = x.FirstName + " " + x.LastName,
+                    Books = x.AuthorsBooks
+                    .OrderByDescending(p => p.Book.Price)
+                    .Select(b => new
+                    {
+                        BookName = b.Book.Name,
+                        BookPrice = b.Book.Price.ToString("f2")
+                    })
+                    .ToArray()
+                })
+                .ToArray()
+                .OrderByDescending(x => x.Books.Count())
+                .ThenBy(x => x.AuthorName)
+                .ToList();
+
+            var authors = JsonConvert.SerializeObject(authorsJson, Formatting.Indented);
+
+            return authors;
         }
 
         public static string ExportOldestBooks(BookShopContext context, DateTime date)

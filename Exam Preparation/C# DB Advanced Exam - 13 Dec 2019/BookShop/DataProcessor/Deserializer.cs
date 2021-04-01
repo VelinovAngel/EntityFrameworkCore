@@ -66,20 +66,11 @@
 
             var authorsJson = JsonConvert.DeserializeObject<IEnumerable<ImportAuthorsModel>>(jsonString);
 
-            List<Author> authors = new List<Author>();
-
             foreach (var authorDto in authorsJson)
             {
-                if (!IsValid(authorDto))
-                {
-                    result.AppendLine(ErrorMessage);
-                    continue;
-                }
+                var emailExists = context.Authors.Any(x => x.Email == authorDto.Email);
 
-                bool doesEmailExists = authors
-                    .FirstOrDefault(x => x.Email == authorDto.Email) != null;
-
-                if (doesEmailExists)
+                if (!IsValid(authorDto) || emailExists)
                 {
                     result.AppendLine(ErrorMessage);
                     continue;
@@ -93,13 +84,10 @@
                     Phone = authorDto.Phone
                 };
 
-                var uniqueBookIds = authorDto.Books.Distinct();
-
-                foreach (var authorDtoAuthorBookDto in uniqueBookIds)
+                foreach (var book in authorDto.Books)
                 {
-                    var book = context.Books.Find(authorDtoAuthorBookDto.Id);
-
-                    if (book == null)
+                    var bookExists = context.Books.Find(book.Id);
+                    if (bookExists == null)
                     {
                         continue;
                     }
@@ -107,21 +95,20 @@
                     author.AuthorsBooks.Add(new AuthorBook
                     {
                         Author = author,
-                        Book = book
+                        Book = bookExists
                     });
                 }
 
-                if (author.AuthorsBooks.Count == 0)
+                if (author.AuthorsBooks.Count() == 0)
                 {
                     result.AppendLine(ErrorMessage);
                     continue;
                 }
 
-                authors.Add(author);
+                context.Authors.Add(author);
                 result.AppendLine(string.Format(SuccessfullyImportedAuthor, (author.FirstName + " " + author.LastName), author.AuthorsBooks.Count));
             }
 
-            context.Authors.AddRange(authors);
             context.SaveChanges();
 
             return result.ToString().TrimEnd();

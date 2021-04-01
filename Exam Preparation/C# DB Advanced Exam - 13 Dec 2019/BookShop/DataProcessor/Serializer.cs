@@ -52,7 +52,7 @@
                 {
                     Pages = x.Pages.ToString(),
                     Name = x.Name,
-                    Data = x.PublishedOn.ToString("d", CultureInfo.InvariantCulture)
+                    Date = x.PublishedOn.ToString("d", CultureInfo.InvariantCulture)
 
                 })
                 .Take(10)

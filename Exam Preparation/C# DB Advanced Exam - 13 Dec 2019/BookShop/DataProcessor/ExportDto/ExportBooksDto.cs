@@ -14,7 +14,7 @@ namespace BookShop.DataProcessor.ExportDto
         [XmlElement("Name")]
         public string Name { get; set; }
 
-        [XmlElement("Data")]
-        public string Data { get; set; }
+        [XmlElement("Date")]
+        public string Date { get; set; }
     }
 }

@@ -1,12 +1,15 @@
 ﻿namespace BookShop.DataProcessor
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text;
     using System.Xml;
     using System.Xml.Serialization;
+    using BookShop.Data.Models.Enums;
+    using BookShop.DataProcessor.ExportDto;
     using Data;
     using Newtonsoft.Json;
     using Formatting = Newtonsoft.Json.Formatting;
@@ -16,7 +19,6 @@
         public static string ExportMostCraziestAuthors(BookShopContext context)
         {
             var authorsJson = context.Authors
-                .ToList()
                 .Select(x => new
                 {
                     AuthorName = x.FirstName + " " + x.LastName,
@@ -41,7 +43,31 @@
 
         public static string ExportOldestBooks(BookShopContext context, DateTime date)
         {
-            return "TODO";
+            var booksXml = context.Books
+                .Where(x => x.PublishedOn < date && x.Genre == Genre.Science)
+                .ToArray()
+                .OrderByDescending(x => x.Pages)
+                .ThenByDescending(x => x.PublishedOn)
+                .Select(x => new ExportBooksDto
+                {
+                    Pages = x.Pages.ToString(),
+                    Name = x.Name,
+                    Data = x.PublishedOn.ToString("d", CultureInfo.InvariantCulture)
+
+                })
+                .Take(10)
+                .ToArray();
+
+            var xmlSerializer = new XmlSerializer(typeof(ExportBooksDto[]), new XmlRootAttribute("Books"));
+
+            var strinWriter = new StringWriter();
+
+            var ns = new XmlSerializerNamespaces();
+            ns.Add(string.Empty, string.Empty);
+
+            xmlSerializer.Serialize(strinWriter, booksXml, ns);
+
+            return strinWriter.ToString();
         }
     }
 }

@@ -8,6 +8,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -132,11 +133,40 @@
 
             foreach (var currProjection in projectionXml)
             {
+                if (!IsValid(currProjection))
+                {
+                    result.AppendLine(ErrorMessage);
+                    continue;
+                }
 
+                var movie = context.Movies.FirstOrDefault(x => x.Id == currProjection.MovieId);
+                var hall = context.Halls.FirstOrDefault(x => x.Id == currProjection.HallId);
+
+                if (movie == null)
+                {
+                    result.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                if (hall == null)
+                {
+                    result.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                var projection = new Projection
+                {
+                    Hall = hall,
+                    Movie = movie,
+                    DateTime = DateTime.ParseExact(currProjection.DateTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)
+                };
+
+                context.Projections.Add(projection);
+                context.SaveChanges();
+                result.AppendLine(string.Format(SuccessfulImportProjection, projection.Movie.Title, projection.DateTime.ToString("MM/dd/yyyy")));
             }
 
-
-            return "TODO";
+            return result.ToString().TrimEnd();
         }
 
         public static string ImportCustomerTickets(CinemaContext context, string xmlString)

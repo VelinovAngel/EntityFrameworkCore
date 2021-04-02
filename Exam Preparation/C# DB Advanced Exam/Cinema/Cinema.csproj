@@ -9,15 +9,16 @@
     <Compile Remove="DataProcessor\ExportDto\**" />
     <Compile Remove="DataProcessor\ImportDto\**" />
     <Compile Remove="Dataset\**" />
-    <Compile Remove="ExportResults\**" />
     <EmbeddedResource Remove="DataProcessor\ExportDto\**" />
     <EmbeddedResource Remove="DataProcessor\ImportDto\**" />
     <EmbeddedResource Remove="Dataset\**" />
-    <EmbeddedResource Remove="ExportResults\**" />
     <None Remove="DataProcessor\ExportDto\**" />
     <None Remove="DataProcessor\ImportDto\**" />
     <None Remove="Dataset\**" />
-    <None Remove="ExportResults\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="DataProcessor\ImportDto\ImportMoviesModels.cs" />
   </ItemGroup>
 
   <ItemGroup>

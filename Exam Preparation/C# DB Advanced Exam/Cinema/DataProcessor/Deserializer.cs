@@ -8,8 +8,10 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Xml.Serialization;
 
     public class Deserializer
     {
@@ -66,11 +68,73 @@
 
         public static string ImportHallSeats(CinemaContext context, string jsonString)
         {
-            return "TODO";
+            var result = new StringBuilder();
+
+            var hallseatsJson = JsonConvert.DeserializeObject<IEnumerable<ImportHallSeatsModel>>(jsonString);
+
+            foreach (var currHall in hallseatsJson)
+            {
+                if (!IsValid(currHall))
+                {
+                    result.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                var newHall = new Hall
+                {
+                    Name = currHall.Name,
+                    Is4Dx = currHall.Is4Dx,
+                    Is3D = currHall.Is3D,
+                };
+
+                for (int i = 0; i < currHall.Seats; i++)
+                {
+                    var seat = new Seat { Hall = newHall };
+                    newHall.Seats.Add(seat);
+                }
+
+                var type = string.Empty;
+                if (newHall.Is3D)
+                {
+                    type = "3D";
+                }
+                else if (newHall.Is4Dx)
+                {
+                    type = "4Dx";
+                }
+                else if (newHall.Is3D && newHall.Is4Dx)
+                {
+                    type = "4Dx/3D";
+                }
+                else
+                {
+                    type = "Normal";
+                }
+
+                context.Halls.Add(newHall);
+                context.SaveChanges();
+                result.AppendLine(string.Format(SuccessfulImportHallSeat, newHall.Name, type, newHall.Seats.Count));
+
+            }
+
+            return result.ToString().TrimEnd();
         }
 
         public static string ImportProjections(CinemaContext context, string xmlString)
         {
+            var result = new StringBuilder();
+
+            var xmlSerailizer = new XmlSerializer(typeof(ImportProjectionModel[]), new XmlRootAttribute("Projections"));
+
+            var strinReader = new StringReader(xmlString);
+
+            var projectionXml = (IEnumerable<ImportProjectionModel>)xmlSerailizer.Deserialize(strinReader);
+
+            foreach (var currProjection in projectionXml)
+            {
+
+            }
+
 
             return "TODO";
         }

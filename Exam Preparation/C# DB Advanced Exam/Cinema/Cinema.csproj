@@ -18,7 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="DataProcessor\ImportDto\ImportHallSeatsModel.cs" />
     <Compile Include="DataProcessor\ImportDto\ImportMoviesModels.cs" />
+    <Compile Include="DataProcessor\ImportDto\ImportProjectionModel.cs" />
   </ItemGroup>
 
   <ItemGroup>

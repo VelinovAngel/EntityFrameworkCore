@@ -7,7 +7,7 @@
 
     using Cinema.Data.Models.Enums;
 
-    class Movie
+    public class Movie
     {
         public Movie()
         {

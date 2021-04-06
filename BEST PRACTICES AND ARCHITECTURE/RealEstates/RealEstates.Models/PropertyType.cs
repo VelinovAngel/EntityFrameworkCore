@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
 
-    public class District
+    public class PropertyType
     {
-        public District()
+        public PropertyType()
         {
             this.Properties = new HashSet<Property>();
         }

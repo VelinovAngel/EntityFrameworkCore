@@ -12,6 +12,8 @@
 
         public byte? TotalFloors { get; set; }
 
+        public int DistrictId { get; set; }
 
+        public virtual District District { get; set; }
     }
 }

@@ -20,6 +20,10 @@
 
         public int TypeId { get; set; }
 
-        public virtual PropertyType PropertyType { get; set; }
+        public virtual PropertyType Type { get; set; }
+
+        public int BuildingTypeId { get; set; }
+
+        public virtual BuildingType BuildingType { get; set; }
     }
 }

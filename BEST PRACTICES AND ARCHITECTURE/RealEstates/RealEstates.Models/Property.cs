@@ -1,7 +1,14 @@
 ﻿namespace RealEstates.Models
 {
+    using System.Collections.Generic;
+
     public class Property
     {
+        public Property()
+        {
+            this.Tags = new HashSet<Tag>();
+        }
+
         public int Id { get; set; }
 
         public int Size { get; set; }
@@ -27,5 +34,7 @@
         public int BuildingTypeId { get; set; }
 
         public virtual BuildingType BuildingType { get; set; }
+
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }

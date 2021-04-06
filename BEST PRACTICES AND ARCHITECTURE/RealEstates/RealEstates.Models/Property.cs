@@ -14,6 +14,8 @@
 
         public int? Year { get; set; }
 
+        public int Price { get; set; }
+
         public int DistrictId { get; set; }
 
         public virtual District District { get; set; }

@@ -1,12 +1,17 @@
-﻿using System;
-
-namespace RealEstates.ConsoleApplication
+﻿namespace RealEstates.ConsoleApplication
 {
+    using System;
+    using Microsoft.EntityFrameworkCore;
+
+
+    using RealEstates.Data;
+
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var context = new ApplicationDbContext();
+            context.Database.Migrate();
         }
     }
 }

@@ -25,8 +25,7 @@
                 Console.WriteLine("1. Property Search");
                 Console.WriteLine("2. Most expensive districts");
                 Console.WriteLine("0. EXIT!");
-                
-
+               
                 bool parsed = int.TryParse(Console.ReadLine(), out int option);
 
                 if (parsed && option == 0)

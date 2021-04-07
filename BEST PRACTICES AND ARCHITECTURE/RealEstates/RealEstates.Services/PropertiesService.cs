@@ -22,7 +22,7 @@
 
         public IEnumerable<PropertyInfoDto> Search(int minPrice, int maxPrice, int minSize, int maxSize)
         {
-            return null;
+            return new List<PropertyInfoDto>();
         }
     }
 }

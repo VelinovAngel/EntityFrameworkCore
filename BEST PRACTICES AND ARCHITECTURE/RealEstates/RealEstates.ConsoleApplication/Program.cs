@@ -56,6 +56,7 @@
         {
             Console.Clear();
             Console.WriteLine("Inser");
+
             IDistrictsService DistrictService = new DistrictService(context);
             var districts = DistrictService.GetMostExpensiveDistricts(20);
             foreach (var district in districts)

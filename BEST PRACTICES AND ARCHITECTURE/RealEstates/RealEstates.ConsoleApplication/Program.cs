@@ -54,6 +54,7 @@
         private static void MostExpensiveDistricts(ApplicationDbContext context)
         {
             Console.Clear();
+            Console.WriteLine("Most expensive districts:");
             Console.WriteLine("Insert districts count:");
             int count = int.Parse(Console.ReadLine());
 
@@ -68,6 +69,7 @@
         private static void PropertySearch(ApplicationDbContext context)
         {
             Console.Clear();
+            Console.WriteLine("Property Search:");
             Console.Write("Min price:");
             int minPrice = int.Parse(Console.ReadLine());
             Console.Write("Max price:");

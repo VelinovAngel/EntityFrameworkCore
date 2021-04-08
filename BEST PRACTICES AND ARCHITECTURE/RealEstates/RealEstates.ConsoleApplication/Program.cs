@@ -54,10 +54,11 @@
         private static void MostExpensiveDistricts(ApplicationDbContext context)
         {
             Console.Clear();
-            Console.WriteLine("Inser");
+            Console.WriteLine("Insert districts count:");
+            int count = int.Parse(Console.ReadLine());
 
             IDistrictsService DistrictService = new DistrictService(context);
-            var districts = DistrictService.GetMostExpensiveDistricts(20);
+            var districts = DistrictService.GetMostExpensiveDistricts(count);
             foreach (var district in districts)
             {
                 Console.WriteLine($"{district.Name} => {district.AveragePricePerSquareMeter}€/m² ({district.PropertiesCount}) ");

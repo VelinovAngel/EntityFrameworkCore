@@ -24,8 +24,9 @@
                 Console.WriteLine("Choose an option:");
                 Console.WriteLine("1. Property Search");
                 Console.WriteLine("2. Most expensive districts");
+                Console.WriteLine("3. Average price per square meter");
                 Console.WriteLine("0. EXIT!");
-               
+
                 bool parsed = int.TryParse(Console.ReadLine(), out int option);
 
                 if (parsed && option == 0)
@@ -33,13 +34,18 @@
                     break;
                 }
 
-                if (parsed && option >= 1 && option <= 2)
+                if (parsed && option >= 1 && option <= 3)
                 {
                     switch (option)
                     {
-                        case 1: PropertySearch(context);
+                        case 1:
+                            PropertySearch(context);
                             break;
-                        case 2: MostExpensiveDistricts(context);
+                        case 2:
+                            MostExpensiveDistricts(context);
+                            break;
+                        case 3:
+                            AveragePricePerSquareMeter(context);
                             break;
                         default:
                             break;
@@ -51,6 +57,14 @@
             }
         }
 
+        private static void AveragePricePerSquareMeter(ApplicationDbContext context)
+        {
+            IPropertiesService service = new PropertiesService(context);
+            var averagePricePerSquareMiters = service.AveragePricePerSquareMeter();
+            
+            Console.WriteLine($"Average price per square meters is : {averagePricePerSquareMiters:F2}");
+        }
+
         private static void MostExpensiveDistricts(ApplicationDbContext context)
         {
             Console.Clear();
@@ -58,11 +72,12 @@
             Console.WriteLine("Insert districts count:");
             int count = int.Parse(Console.ReadLine());
 
-            IDistrictsService DistrictService = new DistrictService(context);
-            var districts = DistrictService.GetMostExpensiveDistricts(count);
+            IDistrictsService districtService = new DistrictService(context);
+            var districts = districtService.GetMostExpensiveDistricts(count);
             foreach (var district in districts)
             {
-                Console.WriteLine($"{district.Name} => {district.AveragePricePerSquareMeter}€/m² ({district.PropertiesCount}) ");
+                Console.WriteLine($"{district.Name} => " +
+                    $"Average price per square meter: {district.AveragePricePerSquareMeter:F2} €/m² .Count: ({district.PropertiesCount}) ");
             }
         }
 
@@ -83,7 +98,8 @@
             var properties = service.Search(minPrice, maxPrice, minSize, maxSize);
             foreach (var property in properties)
             {
-                Console.WriteLine($"{property.DistrictName} ; {property.BuildingType}; {property.PropertyType} => {property.Price}€ => {property.Size}m²");
+                Console.WriteLine($"{property.DistrictName} ; {property.BuildingType}; " +
+                    $"{property.PropertyType} => {property.Price:F2}€ => {property.Size}m²");
             }
         }
     }

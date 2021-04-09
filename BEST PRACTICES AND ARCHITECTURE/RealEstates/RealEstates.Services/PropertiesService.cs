@@ -1,4 +1,4 @@
-namespace RealEstates.Services
+﻿namespace RealEstates.Services
 {
     using System.Linq;
     using System.Collections.Generic;
@@ -10,6 +10,8 @@ namespace RealEstates.Services
 
     public class PropertiesService : IPropertiesService
     {
+        private const string NAME_TYPE = "КЪЩА";
+
         private readonly ApplicationDbContext dbContext;
 
         public PropertiesService(ApplicationDbContext dbContext)
@@ -62,7 +64,9 @@ namespace RealEstates.Services
 
         public decimal AveragePricePerSquareMeter()
         {
+
            var result =  dbContext.Properties
+                .Where(x=>x.Type.Name != NAME_TYPE)
                 .Where(x => x.Price.HasValue)
                 .Average(x => x.Price / (decimal)x.Size) ?? 0;
 

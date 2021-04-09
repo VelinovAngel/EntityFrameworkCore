@@ -25,6 +25,7 @@
                 Console.WriteLine("1. Property Search");
                 Console.WriteLine("2. Most expensive districts");
                 Console.WriteLine("3. Average price per square meter");
+                Console.WriteLine("4. Add Tag");
                 Console.WriteLine("0. EXIT!");
 
                 bool parsed = int.TryParse(Console.ReadLine(), out int option);
@@ -34,7 +35,7 @@
                     break;
                 }
 
-                if (parsed && option >= 1 && option <= 3)
+                if (parsed && option >= 1 && option <= 4)
                 {
                     switch (option)
                     {
@@ -47,6 +48,9 @@
                         case 3:
                             AveragePricePerSquareMeter(context);
                             break;
+                        case 4:
+                            AddTag(context);
+                            break;
                         default:
                             break;
                     }
@@ -57,12 +61,32 @@
             }
         }
 
+        private static void AddTag(ApplicationDbContext context)
+        {
+            Console.Clear();
+            Console.WriteLine("Add tags:");
+            Console.Write("Tag name:");
+
+            string tagName = Console.ReadLine();
+
+            Console.Write("Importance(optional):");
+
+            bool isParsed = int.TryParse(Console.ReadLine(), out int tagImportance);
+
+            ITagService tagService = new TagService(context);
+
+            int? importance = isParsed ? tagImportance : null;
+
+            tagService.Add(tagName, importance);
+        }
+
         private static void AveragePricePerSquareMeter(ApplicationDbContext context)
         {
             IPropertiesService service = new PropertiesService(context);
             var averagePricePerSquareMiters = service.AveragePricePerSquareMeter();
             
             Console.WriteLine($"Average price per square meters is : {averagePricePerSquareMiters:F2} €/m².");
+            Console.WriteLine("The price doesn't contains houses!");
         }
 
         private static void MostExpensiveDistricts(ApplicationDbContext context)

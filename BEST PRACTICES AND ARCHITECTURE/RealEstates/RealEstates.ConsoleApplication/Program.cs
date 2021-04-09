@@ -62,7 +62,7 @@
             IPropertiesService service = new PropertiesService(context);
             var averagePricePerSquareMiters = service.AveragePricePerSquareMeter();
             
-            Console.WriteLine($"Average price per square meters is : {averagePricePerSquareMiters:F2}");
+            Console.WriteLine($"Average price per square meters is : {averagePricePerSquareMiters:F2} €/m².");
         }
 
         private static void MostExpensiveDistricts(ApplicationDbContext context)

@@ -62,7 +62,11 @@ namespace RealEstates.Services
 
         public decimal AveragePricePerSquareMeter()
         {
-            throw new System.NotImplementedException();
+           var result =  dbContext.Properties
+                .Where(x => x.Price.HasValue)
+                .Average(x => x.Price / (decimal)x.Size) ?? 0;
+
+            return result;
         }
 
         public IEnumerable<PropertyInfoDto> Search(int minPrice, int maxPrice, int minSize, int maxSize)

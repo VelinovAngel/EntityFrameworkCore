@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using System.Collections.Generic;
+    using AutoMapper.QueryableExtensions;
 
 
     using RealEstates.Data;
@@ -94,15 +95,17 @@
         {
             var properties = dbContext.Properties
                 .Where(x => (x.Price >= minPrice && x.Price <= maxPrice) && (x.Size >= minSize && x.Size <= maxSize))
-                .Select(x => new PropertyInfoDto
-                {
-                    Size = x.Size,
-                    Price = x.Price ?? 0,
-                    BuildingType = x.BuildingType.Name,
-                    DistrictName = x.District.Name,
-                    PropertyType = x.Type.Name
-                })
+                .ProjectTo<PropertyInfoDto>(this.Mapper.ConfigurationProvider)
                 .ToList();
+                //.Select(x => new PropertyInfoDto
+                //{
+                //    Size = x.Size,
+                //    Price = x.Price ?? 0,
+                //    BuildingType = x.BuildingType.Name,
+                //    DistrictName = x.District.Name,
+                //    PropertyType = x.Type.Name
+                //})
+                //.ToList();
 
             return properties;
         }

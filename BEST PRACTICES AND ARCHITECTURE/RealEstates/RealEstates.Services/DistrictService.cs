@@ -6,7 +6,7 @@
     using RealEstates.Data;
     using RealEstates.Services.Models;
 
-    public class DistrictService : IDistrictsService
+    public class DistrictService : BaseService , IDistrictsService
     {
         private readonly ApplicationDbContext context;
 

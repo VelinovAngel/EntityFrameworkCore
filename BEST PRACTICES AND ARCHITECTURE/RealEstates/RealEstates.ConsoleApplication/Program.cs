@@ -4,7 +4,6 @@
     using System.Text;
     using Microsoft.EntityFrameworkCore;
 
-
     using RealEstates.Data;
     using RealEstates.Services;
 

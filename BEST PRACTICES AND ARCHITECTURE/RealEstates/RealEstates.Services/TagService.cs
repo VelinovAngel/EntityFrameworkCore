@@ -5,7 +5,7 @@
     using RealEstates.Data;
     using RealEstates.Models;
 
-    public class TagService : ITagService
+    public class TagService : BaseService, ITagService
     {
         private const int YEAR_PROPERTY = 15;
 
@@ -77,8 +77,9 @@
                     var currTag = GetTag("малък-имот");
                     property.Tags.Add(currTag);
                 }
+
+                dbContext.SaveChanges();
             }
-            dbContext.SaveChanges();
         }
 
         private Tag GetTag(string tag)

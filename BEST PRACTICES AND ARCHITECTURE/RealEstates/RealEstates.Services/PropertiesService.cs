@@ -8,7 +8,7 @@
     using RealEstates.Models;
     using RealEstates.Services.Models;
 
-    public class PropertiesService : IPropertiesService
+    public class PropertiesService : BaseService, IPropertiesService
     {
         private const string NAME_TYPE = "КЪЩА";
 

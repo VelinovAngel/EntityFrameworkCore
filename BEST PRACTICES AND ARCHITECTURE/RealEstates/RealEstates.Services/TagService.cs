@@ -62,6 +62,21 @@
                     var currTag = GetTag("нов-имот");
                     property.Tags.Add(currTag);
                 }
+
+                var avegrageSize = propertiesService.AverageSize(property.DistrictId);
+                //голям - имот
+                //малък - имот
+
+                if (property.Size > avegrageSize)
+                {
+                    var currTag = GetTag("голям-имот");
+                    property.Tags.Add(currTag);
+                }
+                else if (property.Size <= avegrageSize)
+                {
+                    var currTag = GetTag("малък-имот");
+                    property.Tags.Add(currTag);
+                }
             }
             dbContext.SaveChanges();
         }

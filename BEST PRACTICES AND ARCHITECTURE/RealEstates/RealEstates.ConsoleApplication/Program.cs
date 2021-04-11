@@ -69,7 +69,8 @@
         {
             Console.Clear();
             Console.WriteLine("Bulk operation started!");
-            ITagService tagService = new TagService(context);
+            IPropertiesService propertiesService = new PropertiesService(context);
+            ITagService tagService = new TagService(context, propertiesService);
             tagService.BulkTagToProperties();
             Console.WriteLine("Bulk operation finished!");
         }
@@ -86,7 +87,8 @@
 
             bool isParsed = int.TryParse(Console.ReadLine(), out int tagImportance);
 
-            ITagService tagService = new TagService(context);
+            IPropertiesService propertiesService = new PropertiesService(context);
+            ITagService tagService = new TagService(context, propertiesService);
 
             int? importance = isParsed ? tagImportance : null;
 

@@ -72,10 +72,10 @@
             return result;
         }
 
-        public decimal AveragePricePerSquareMeter(int id)
+        public decimal AveragePricePerSquareMeter(int districtId)
         {
             var result = dbContext.Properties
-                 .Where(x => x.Price.HasValue && x.DistrictId == id)
+                 .Where(x => x.Price.HasValue && x.DistrictId == districtId)
                  .Average(x => x.Price / (decimal)x.Size) ?? 0;
 
             return result;

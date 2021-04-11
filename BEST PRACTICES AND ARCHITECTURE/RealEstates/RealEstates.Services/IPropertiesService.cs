@@ -5,8 +5,8 @@
     public interface IPropertiesService
     {
         void Add(string district, int floor, int maxFloor, int size, int yardSize, int year, string propertyType, string buildingType, int price);
-
         decimal AveragePricePerSquareMeter();
+        decimal AveragePricePerSquareMeter(int districtId);
         IEnumerable<PropertyInfoDto> Search(int minPrice, int maxPrice, int minSize, int maxSize);
     }
 }

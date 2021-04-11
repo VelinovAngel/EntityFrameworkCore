@@ -7,6 +7,8 @@
 
     public class TagService : ITagService
     {
+        private const int YEAR_PROPERTY = 15;
+
         private readonly ApplicationDbContext dbContext;
         private readonly IPropertiesService propertiesService;
 
@@ -37,20 +39,38 @@
                 var averagePriceForAnDistrict = this.propertiesService
                     .AveragePricePerSquareMeter(property.DistrictId);
 
-                if (property.Price > averagePriceForAnDistrict)
+                if (property.Price >= averagePriceForAnDistrict)
                 {
-                    var currTag = dbContext.Tags.FirstOrDefault(x => x.Name == "скъп-имот");
+                    var currTag = GetTag("скъп-имот");
+                    property.Tags.Add(currTag);
+                }
+                else if (property.Price < averagePriceForAnDistrict)
+                {
+                    var currTag = GetTag("евтин-имот");
                     property.Tags.Add(currTag);
                 }
 
-                if (property.Price < averagePriceForAnDistrict)
+                var currDate = DateTime.Now.AddYears(YEAR_PROPERTY);
+
+                if (property.Year.HasValue && property.Year <= currDate.Year)
                 {
-                    var currTag = dbContext.Tags.FirstOrDefault(x => x.Name == "евтин-имот");
+                    var currTag = GetTag("стар-имот");
+                    property.Tags.Add(currTag);
+                }
+                else if (property.Year.HasValue && property.Year > currDate.Year)
+                {
+                    var currTag = GetTag("нов-имот");
                     property.Tags.Add(currTag);
                 }
             }
-
             dbContext.SaveChanges();
+        }
+
+        private Tag GetTag(string tag)
+        {
+            var currTag = dbContext.Tags.FirstOrDefault(x => x.Name == tag);
+
+            return currTag;
         }
     }
 }

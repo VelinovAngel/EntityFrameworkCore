@@ -27,7 +27,7 @@
 
         public void BulkTagToProperties()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

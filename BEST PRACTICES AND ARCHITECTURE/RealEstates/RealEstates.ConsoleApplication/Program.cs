@@ -26,6 +26,7 @@
                 Console.WriteLine("2. Most expensive districts");
                 Console.WriteLine("3. Average price per square meter");
                 Console.WriteLine("4. Add Tag");
+                Console.WriteLine("5. Bulk to tag properties");
                 Console.WriteLine("0. EXIT!");
 
                 bool parsed = int.TryParse(Console.ReadLine(), out int option);
@@ -35,7 +36,7 @@
                     break;
                 }
 
-                if (parsed && option >= 1 && option <= 4)
+                if (parsed && option >= 1 && option <= 5)
                 {
                     switch (option)
                     {
@@ -51,6 +52,9 @@
                         case 4:
                             AddTag(context);
                             break;
+                        case 5:
+                            BulkTagsToProperties(context);
+                            break;
                         default:
                             break;
                     }
@@ -59,6 +63,15 @@
                     Console.ReadKey();
                 }
             }
+        }
+
+        private static void BulkTagsToProperties(ApplicationDbContext context)
+        {
+            Console.Clear();
+            Console.WriteLine("Bulk operation started!");
+            ITagService tagService = new TagService(context);
+            tagService.BulkTagToProperties();
+            Console.WriteLine("Bulk operation finished!");
         }
 
         private static void AddTag(ApplicationDbContext context)

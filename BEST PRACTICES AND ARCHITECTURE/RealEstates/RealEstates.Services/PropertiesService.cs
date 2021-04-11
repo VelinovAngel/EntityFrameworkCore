@@ -64,10 +64,10 @@
 
         public decimal AveragePricePerSquareMeter()
         {
-           var result =  dbContext.Properties
-                .Where(x=>x.Type.Name != NAME_TYPE)
-                .Where(x => x.Price.HasValue)
-                .Average(x => x.Price / (decimal)x.Size) ?? 0;
+            var result = dbContext.Properties
+                 .Where(x => x.Type.Name != NAME_TYPE)
+                 .Where(x => x.Price.HasValue)
+                 .Average(x => x.Price / (decimal)x.Size) ?? 0;
 
             return result;
         }
@@ -81,11 +81,20 @@
             return result;
         }
 
+        public double AverageSize(int districtId)
+        {
+            var result = dbContext.Properties
+                 .Where(x => x.Price.HasValue && x.DistrictId == districtId)
+                 .Average(x => x.Size);
+
+            return result;
+        }
+
         public IEnumerable<PropertyInfoDto> Search(int minPrice, int maxPrice, int minSize, int maxSize)
         {
             var properties = dbContext.Properties
                 .Where(x => (x.Price >= minPrice && x.Price <= maxPrice) && (x.Size >= minSize && x.Size <= maxSize))
-                .Select(x=> new PropertyInfoDto
+                .Select(x => new PropertyInfoDto
                 {
                     Size = x.Size,
                     Price = x.Price ?? 0,

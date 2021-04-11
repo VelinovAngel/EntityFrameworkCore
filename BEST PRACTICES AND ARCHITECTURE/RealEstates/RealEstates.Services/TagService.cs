@@ -1,7 +1,7 @@
 ﻿namespace RealEstates.Services
 {
     using System;
-
+    using System.Linq;
     using RealEstates.Data;
     using RealEstates.Models;
 
@@ -27,7 +27,15 @@
 
         public void BulkTagToProperties()
         {
-            
+            var allProperties = dbContext.Properties
+                .ToList();
+
+            foreach (var property in allProperties)
+            {
+                var averagePriceForAnDistrict = dbContext.Properties
+                    .Where(x => x.DistrictId == property.DistrictId)
+                    .Average(x => x.Price / (decimal));
+            }
         }
     }
 }

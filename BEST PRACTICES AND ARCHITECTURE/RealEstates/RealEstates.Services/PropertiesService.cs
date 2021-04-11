@@ -64,11 +64,19 @@
 
         public decimal AveragePricePerSquareMeter()
         {
-
            var result =  dbContext.Properties
                 .Where(x=>x.Type.Name != NAME_TYPE)
                 .Where(x => x.Price.HasValue)
                 .Average(x => x.Price / (decimal)x.Size) ?? 0;
+
+            return result;
+        }
+
+        public decimal AveragePricePerSquareMeter(int id)
+        {
+            var result = dbContext.Properties
+                 .Where(x => x.Price.HasValue && x.DistrictId == id)
+                 .Average(x => x.Price / (decimal)x.Size) ?? 0;
 
             return result;
         }

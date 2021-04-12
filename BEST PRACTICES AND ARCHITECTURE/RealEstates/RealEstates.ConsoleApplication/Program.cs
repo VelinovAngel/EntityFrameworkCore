@@ -77,10 +77,7 @@
 
             var properties = propertiesService.GetFullDate(count);
 
-            foreach (var property in properties)
-            {
-                
-            }
+            
         }
 
         private static void BulkTagsToProperties(ApplicationDbContext context)

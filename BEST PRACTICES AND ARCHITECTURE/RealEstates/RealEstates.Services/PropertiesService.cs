@@ -91,6 +91,11 @@
             return result;
         }
 
+        public IEnumerable<PropertyInfoDto> GetFullDate(int count)
+        {
+
+        }
+
         public IEnumerable<PropertyInfoDto> Search(int minPrice, int maxPrice, int minSize, int maxSize)
         {
             var properties = dbContext.Properties

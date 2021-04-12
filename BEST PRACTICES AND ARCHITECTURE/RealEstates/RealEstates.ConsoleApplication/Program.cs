@@ -26,6 +26,7 @@
                 Console.WriteLine("3. Average price per square meter");
                 Console.WriteLine("4. Add Tag");
                 Console.WriteLine("5. Bulk to tag properties");
+                Console.WriteLine("6. Get property full info");
                 Console.WriteLine("0. EXIT!");
 
                 bool parsed = int.TryParse(Console.ReadLine(), out int option);
@@ -35,7 +36,7 @@
                     break;
                 }
 
-                if (parsed && option >= 1 && option <= 5)
+                if (parsed && option >= 1 && option <= 6)
                 {
                     switch (option)
                     {
@@ -54,6 +55,9 @@
                         case 5:
                             BulkTagsToProperties(context);
                             break;
+                        case 6:
+                            GetPropertyFullInfo(context);
+                            break;
                         default:
                             break;
                     }
@@ -62,6 +66,16 @@
                     Console.ReadKey();
                 }
             }
+        }
+
+        private static void GetPropertyFullInfo(ApplicationDbContext context)
+        {
+            Console.Clear();
+            Console.WriteLine("Full info:");
+            int count = int.Parse(Console.ReadLine());
+            IPropertiesService propertiesService = new PropertiesService(context);
+
+            
         }
 
         private static void BulkTagsToProperties(ApplicationDbContext context)

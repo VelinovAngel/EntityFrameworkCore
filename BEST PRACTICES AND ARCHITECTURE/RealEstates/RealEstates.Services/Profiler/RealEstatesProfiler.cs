@@ -17,6 +17,8 @@
                                           y => y.MapFrom(s => s.Properties
                                                 .Where(x => x.Price.HasValue)
                                                 .Average(p => p.Price / (decimal)p.Size) ?? 0));
+
+            this.CreateMap<Property, PropertyInfoFullData>();      
         }
     }
 }

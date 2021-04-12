@@ -75,7 +75,12 @@
             int count = int.Parse(Console.ReadLine());
             IPropertiesService propertiesService = new PropertiesService(context);
 
-            
+            var properties = propertiesService.GetFullDate(count);
+
+            foreach (var property in properties)
+            {
+                
+            }
         }
 
         private static void BulkTagsToProperties(ApplicationDbContext context)

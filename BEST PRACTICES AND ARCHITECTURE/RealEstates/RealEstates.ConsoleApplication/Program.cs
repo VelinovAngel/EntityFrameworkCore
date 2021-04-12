@@ -1,11 +1,14 @@
 ﻿namespace RealEstates.ConsoleApplication
 {
     using System;
+    using System.IO;
     using System.Text;
+    using System.Xml.Serialization;
     using Microsoft.EntityFrameworkCore;
 
     using RealEstates.Data;
     using RealEstates.Services;
+    using RealEstates.Services.Models;
 
     class Program
     {
@@ -74,10 +77,13 @@
             Console.WriteLine("Full info:");
             int count = int.Parse(Console.ReadLine());
             IPropertiesService propertiesService = new PropertiesService(context);
-
             var properties = propertiesService.GetFullDate(count);
-
-            
+            var xmlSerializer = new XmlSerializer(typeof(PropertyInfoFullData[]), new XmlRootAttribute("Properties"));
+            var stringWriter = new StringWriter();
+            var ns = new XmlSerializerNamespaces();
+            ns.Add(string.Empty, string.Empty);
+            xmlSerializer.Serialize(stringWriter, properties, ns);
+            Console.WriteLine(stringWriter.ToString().TrimEnd());
         }
 
         private static void BulkTagsToProperties(ApplicationDbContext context)
@@ -114,7 +120,7 @@
         {
             IPropertiesService service = new PropertiesService(context);
             var averagePricePerSquareMiters = service.AveragePricePerSquareMeter();
-            
+
             Console.WriteLine($"Average price per square meters is : {averagePricePerSquareMiters:F2} €/m².");
             Console.WriteLine("The price doesn't contains houses!");
         }

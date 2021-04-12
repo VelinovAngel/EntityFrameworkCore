@@ -11,6 +11,8 @@ using System.Collections.Generic;
 
         public int Price { get; set; }
 
+        public int Year { get; set; }
+
         public string PropertyType { get; set; }
 
         public string BuildingType { get; set; }

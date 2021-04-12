@@ -91,9 +91,21 @@
             return result;
         }
 
-        public IEnumerable<PropertyInfoDto> GetFullDate(int count)
+        public IEnumerable<PropertyInfoFullData> GetFullDate(int count)
         {
+            var properties = dbContext.Properties
+                .Where(x => x.Floor.HasValue &&
+                x.Floor.Value > 1 &&
+                x.Floor.Value <= 6 &&
+                x.Year.HasValue && x.Year > 2015)
+                .ProjectTo<PropertyInfoFullData>(this.Mapper.ConfigurationProvider)
+                .OrderByDescending(x=>x.Price)
+                .ThenBy(x=>x.Size)
+                .ThenBy(x=>x.Year)
+                .Take(count)
+                .ToList();
 
+            return properties;
         }
 
         public IEnumerable<PropertyInfoDto> Search(int minPrice, int maxPrice, int minSize, int maxSize)
@@ -102,15 +114,15 @@
                 .Where(x => (x.Price >= minPrice && x.Price <= maxPrice) && (x.Size >= minSize && x.Size <= maxSize))
                 .ProjectTo<PropertyInfoDto>(this.Mapper.ConfigurationProvider)
                 .ToList();
-                //.Select(x => new PropertyInfoDto
-                //{
-                //    Size = x.Size,
-                //    Price = x.Price ?? 0,
-                //    BuildingType = x.BuildingType.Name,
-                //    DistrictName = x.District.Name,
-                //    PropertyType = x.Type.Name
-                //})
-                //.ToList();
+            //.Select(x => new PropertyInfoDto
+            //{
+            //    Size = x.Size,
+            //    Price = x.Price ?? 0,
+            //    BuildingType = x.BuildingType.Name,
+            //    DistrictName = x.District.Name,
+            //    PropertyType = x.Type.Name
+            //})
+            //.ToList();
 
             return properties;
         }

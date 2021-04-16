@@ -28,7 +28,6 @@
             this.dbContext.Tags.Add(tag);
             this.dbContext.SaveChanges();
         }
-
         public void BulkTagToProperties()
         {
             var allProperties = dbContext.Properties

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.Web", "Quiz.Web\Quiz.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.Data", "Quiz.Data\Quiz.Data.csproj", "{670A9E5D-1D09-40A0-9051-DF7C32C096C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.Model", "Quiz.Model\Quiz.Model.csproj", "{0963AC3C-6A81-43FB-BEB3-18B8A71C6CA2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.Models", "Quiz.Model\Quiz.Models.csproj", "{0963AC3C-6A81-43FB-BEB3-18B8A71C6CA2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.Services", "Quiz.Services\Quiz.Services.csproj", "{1F29E824-82B5-4F30-862E-246E6C565B37}"
 EndProject

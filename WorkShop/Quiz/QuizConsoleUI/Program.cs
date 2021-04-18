@@ -1,5 +1,6 @@
 ﻿namespace QuizConsoleUI
 {
+    using System;
     using System.IO;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -18,11 +19,28 @@
             ConfigureServices(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            //var quizSerice = serviceProvider.GetService<IQuizService>();
-            //quizSerice.Add("C# DB");
+            var quizService = serviceProvider.GetService<IQuizService>();
+            var quiz =  quizService.GetQuizById(1);
+
+            Console.WriteLine(quiz.Title);
+            foreach (var question in quiz.Questions)
+            {
+                Console.WriteLine(question.Title);
+                foreach (var answer in question.Answers)
+                {
+                    Console.WriteLine(answer.Title);
+                }
+            }
 
             //var questionService = serviceProvider.GetService<IQuestionService>();
             //questionService.Add("What is Entity Framework Core?", 1);
+
+            //var answerService = serviceProvider.GetService<IAnswerService>();
+            //answerService.Add("It is a ORM", 5, true, 1);
+            //answerService.Add("It is a MicroORM", 0, false, 1);
+
+            //var userAnswer = serviceProvider.GetService<IUserAnswerService>();
+            //userAnswer.AddUserAnswer("3f7c18cc-6d09-49e0-b401-927b295c9131", 1, 1, 2);
 
         }
 
@@ -42,6 +60,12 @@
             services.AddTransient<IQuizService, QuizService>();
 
             services.AddTransient<IQuestionService, QuestionService>();
+
+            services.AddTransient<IAnswerService, AnswerService>();
+
+            services.AddTransient<IUserAnswerService, UserAnswerService>();
+
+
         }
     }
 }

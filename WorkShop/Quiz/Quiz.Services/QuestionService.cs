@@ -2,27 +2,29 @@
 {
     using Quiz.Data;
     using Quiz.Models;
-
     using Quiz.Services.Contracts;
-
-    public class QuizService : IQuizService
+    public class QuestionService : IQuestionService
     {
         private readonly ApplicationDbContext applicationDbContext;
 
-        public QuizService(ApplicationDbContext applicationDbContext)
+        public QuestionService(ApplicationDbContext applicationDbContext)
         {
             this.applicationDbContext = applicationDbContext;
         }
 
-        public void Add(string title)
+        public int Add(string title, int quizId)
         {
-            var quiz = new Quiz
+
+            var question = new Question
             {
-                Titile = title
+                Titile = title,
+                QuizId = quizId
             };
 
-            this.applicationDbContext.Quizzes.Add(quiz);
+            this.applicationDbContext.Questions.Add(question);
             this.applicationDbContext.SaveChanges();
+
+            return question.Id;
         }
     }
 }

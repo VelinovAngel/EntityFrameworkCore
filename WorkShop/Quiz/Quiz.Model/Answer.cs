@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace Quiz.Models
+﻿namespace Quiz.Models
 {
+    using System.Collections.Generic;
     public class Answer
     {
         public Answer()

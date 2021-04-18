@@ -1,6 +1,5 @@
 ﻿namespace QuizConsoleUI
 {
-    using System;
     using System.IO;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -8,6 +7,9 @@
     using Microsoft.Extensions.DependencyInjection;
 
     using Quiz.Data;
+    using Quiz.Services;
+    using Quiz.Services.Contracts;
+
     class Program
     {
         static void Main(string[] args)
@@ -16,12 +18,8 @@
             ConfigureServices(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var dbContext = serviceProvider.GetService<ApplicationDbContext>();
-
-            foreach (var item in dbContext.Users)
-            {
-                Console.WriteLine(item.UserName);
-            }
+            var quizSerice = serviceProvider.GetService<IQuizService>();
+            quizSerice.Add("C# DB");
         }
          
         private static void ConfigureServices(IServiceCollection services)
@@ -36,6 +34,8 @@
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddTransient<IQuizService, QuizService>();
         }
     }
 }

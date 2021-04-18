@@ -34,6 +34,18 @@
                 x.QuizId
             });
 
+            builder.Entity<Answer>()
+                .HasOne(x => x.Question)
+                .WithMany(x => x.Answers)
+                .HasForeignKey(x => x.QuestionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Question>()
+                .HasOne(x => x.Quiz)
+                .WithMany(x => x.Qestions)
+                .HasForeignKey(x => x.QuizId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(builder);
         }
     }

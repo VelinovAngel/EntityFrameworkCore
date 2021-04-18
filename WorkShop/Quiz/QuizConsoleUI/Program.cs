@@ -18,10 +18,14 @@
             ConfigureServices(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var quizSerice = serviceProvider.GetService<IQuizService>();
-            quizSerice.Add("C# DB");
+            //var quizSerice = serviceProvider.GetService<IQuizService>();
+            //quizSerice.Add("C# DB");
+
+            //var questionService = serviceProvider.GetService<IQuestionService>();
+            //questionService.Add("What is Entity Framework Core?", 1);
+
         }
-         
+
         private static void ConfigureServices(IServiceCollection services)
         {
             var configuration = new ConfigurationBuilder()
@@ -29,13 +33,15 @@
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            services.AddDbContext<ApplicationDbContext>(options 
+            services.AddDbContext<ApplicationDbContext>(options
                 => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddTransient<IQuizService, QuizService>();
+
+            services.AddTransient<IQuestionService, QuestionService>();
         }
     }
 }

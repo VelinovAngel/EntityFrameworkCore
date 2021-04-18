@@ -15,6 +15,10 @@
 
         public int Points { get; set; }
 
+        public int QuestionId { get; set; }
+
+        public Question Question { get; set; }
+
         public ICollection<UserAnswer> UserAnswers { get; set; }
     }
 }

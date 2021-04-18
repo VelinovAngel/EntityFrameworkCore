@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace Quiz.Models
+﻿namespace Quiz.Models
 {
+    using Microsoft.AspNetCore.Identity;
     public class UserAnswer
     {
         public string IdentityUserId { get; set; }

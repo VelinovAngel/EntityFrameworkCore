@@ -1,14 +1,13 @@
-﻿using System;
-using System.IO;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-using Quiz.Data;
-
-namespace QuizConsoleUI
+﻿namespace QuizConsoleUI
 {
+    using System;
+    using System.IO;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+
+    using Quiz.Data;
     class Program
     {
         static void Main(string[] args)

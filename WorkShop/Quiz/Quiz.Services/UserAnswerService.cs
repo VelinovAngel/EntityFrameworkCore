@@ -1,10 +1,14 @@
 ﻿namespace Quiz.Services
 {
+    using System.Linq;
+    using System.Collections.Generic;
+    using Microsoft.EntityFrameworkCore;
+
+
     using Quiz.Data;
     using Quiz.Models;
     using Quiz.Services.Contracts;
     using Quiz.Services.Models;
-    using System.Collections.Generic;
 
     public class UserAnswerService : IUserAnswerService
     {
@@ -47,6 +51,32 @@
 
             this.applicationDbContext.AddRange(userAnswers);
             this.applicationDbContext.SaveChanges();
+        }
+
+        public int GetUserResult(string userID, int quizId)
+        {
+            var originalQuiz = this.applicationDbContext
+                .Quizzes
+                .Include(x=>x.Qestions)
+                .ThenInclude(x=>x.Answers)
+                .FirstOrDefault(x => x.Id == quizId);
+
+            var userAnswers = this.applicationDbContext.UsersAnswers
+                .Where(x => x.IdentityUserId == userID && x.QuizId == quizId)
+                .ToList();
+
+            int totalPoints = 0;
+
+            foreach (var userAnswer in userAnswers)
+            {
+                totalPoints += originalQuiz.Qestions
+                    .FirstOrDefault(x => x.Id == userAnswer.QuestionId)
+                    .Answers
+                    .Where(x => x.IsCorrect)
+                    .FirstOrDefault(x => x.Id == userAnswer.AnswerId)
+                    .Points;
+            }
+            return totalPoints;
         }
     }
 }

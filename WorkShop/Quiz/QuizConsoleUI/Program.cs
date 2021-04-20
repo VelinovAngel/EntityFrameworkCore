@@ -19,18 +19,10 @@
             ConfigureServices(serviceCollection);
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var quizService = serviceProvider.GetService<IQuizService>();
-            var quiz =  quizService.GetQuizById(1);
+            var quizService = serviceProvider.GetService<IUserAnswerService>();
+            var quiz = quizService.GetUserResult("3f7c18cc-6d09-49e0-b401-927b295c9131", 1);
 
-            Console.WriteLine(quiz.Title);
-            foreach (var question in quiz.Questions)
-            {
-                Console.WriteLine(question.Title);
-                foreach (var answer in question.Answers)
-                {
-                    Console.WriteLine(answer.Title);
-                }
-            }
+            Console.WriteLine(quiz);
 
             //var questionService = serviceProvider.GetService<IQuestionService>();
             //questionService.Add("What is Entity Framework Core?", 1);

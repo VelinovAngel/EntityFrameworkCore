@@ -65,7 +65,7 @@
                 .Where(x => x.IdentityUserId == userID && x.QuizId == quizId)
                 .ToList();
 
-            int totalPoints = 0;
+            int? totalPoints = 0;
 
             foreach (var userAnswer in userAnswers)
             {
@@ -74,9 +74,9 @@
                     .Answers
                     .Where(x => x.IsCorrect)
                     .FirstOrDefault(x => x.Id == userAnswer.AnswerId)
-                    .Points;
+                    ?.Points;
             }
-            return totalPoints;
+            return totalPoints.GetValueOrDefault();
         }
     }
 }

@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using Microsoft.EntityFrameworkCore;
 
-
     using Quiz.Data;
     using Quiz.Models;
     using Quiz.Services.Contracts;

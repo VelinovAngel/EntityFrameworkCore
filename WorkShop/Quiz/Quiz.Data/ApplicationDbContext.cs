@@ -11,7 +11,6 @@
             : base(options)
         {
         }
-
         public DbSet<Models.Quiz> Quizzes { get; set; }
 
         public DbSet<Question> Questions { get; set; }

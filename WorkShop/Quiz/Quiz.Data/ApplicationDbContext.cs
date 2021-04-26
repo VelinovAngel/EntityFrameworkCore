@@ -1,8 +1,8 @@
 ﻿namespace Quiz.Data
 {
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
     using Quiz.Models;
     public class ApplicationDbContext : IdentityDbContext<IdentityUser>

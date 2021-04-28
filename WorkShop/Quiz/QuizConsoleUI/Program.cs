@@ -56,8 +56,6 @@
             services.AddTransient<IAnswerService, AnswerService>();
 
             services.AddTransient<IUserAnswerService, UserAnswerService>();
-
-
         }
     }
 }

@@ -34,7 +34,6 @@
 
             //var userAnswer = serviceProvider.GetService<IUserAnswerService>();
             //userAnswer.AddUserAnswer("3f7c18cc-6d09-49e0-b401-927b295c9131", 1, 1, 2);
-
         }
 
         private static void ConfigureServices(IServiceCollection services)

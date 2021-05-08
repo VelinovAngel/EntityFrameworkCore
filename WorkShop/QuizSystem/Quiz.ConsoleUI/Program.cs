@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.IO;
+using Quiz.Data;
+using Quiz.Services;
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using Quiz.Data;
-using Quiz.Services;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Quiz.ConsoleUI
 {
@@ -24,16 +23,6 @@ namespace Quiz.ConsoleUI
             var jsonImporter = serviceProvider.GetService<IJsonImportService>();
             jsonImporter.Import("EF-Core-Quiz.json", "EF Core Test v2");
 
-            //var answerService = serviceProvider.GetService<IAnswerService>();
-            //answerService.Add("2", 5, true, 2);
-
-            //var userAnswerService = serviceProvider.GetService<IUserAnswerService>();
-            //userAnswerService.AddUserAnswer("df871d8b-1e64-49cc-92db-f35ab8a75452", 1, 2, 1);
-
-            //var quizService = serviceProvider.GetService<IUserAnswerService>();
-            //var quiz = quizService.GetUserResult("df871d8b-1e64-49cc-92db-f35ab8a75452", 1);
-
-            //Console.WriteLine(quiz);
         }
 
         private static void ConfigureServices(IServiceCollection services)

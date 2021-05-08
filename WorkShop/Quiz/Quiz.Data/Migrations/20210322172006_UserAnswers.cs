@@ -2,12 +2,12 @@
 
 namespace Quiz.Data.Migrations
 {
-    public partial class UsersAnswers : Migration
+    public partial class UserAnswers : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "UsersAnswers",
+                name: "UserAnswers",
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
@@ -17,14 +17,14 @@ namespace Quiz.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UsersAnswers", x => new { x.UserId, x.QuizId });
+                    table.PrimaryKey("PK_UserAnswers", x => new { x.UserId, x.QuizId });
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "UsersAnswers");
+                name: "UserAnswers");
         }
     }
 }

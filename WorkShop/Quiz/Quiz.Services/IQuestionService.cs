@@ -1,4 +1,4 @@
-﻿namespace Quiz.Services.Contracts
+﻿namespace Quiz.Services
 {
     public interface IQuestionService
     {

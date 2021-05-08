@@ -1,8 +1,8 @@
-﻿namespace Quiz.Services
+﻿using Quiz.Data;
+using Quiz.Models;
+
+namespace Quiz.Services
 {
-    using Quiz.Data;
-    using Quiz.Models;
-    using Quiz.Services.Contracts;
     public class QuestionService : IQuestionService
     {
         private readonly ApplicationDbContext applicationDbContext;
@@ -14,10 +14,9 @@
 
         public int Add(string title, int quizId)
         {
-
             var question = new Question
             {
-                Titile = title,
+                Title = title,
                 QuizId = quizId
             };
 

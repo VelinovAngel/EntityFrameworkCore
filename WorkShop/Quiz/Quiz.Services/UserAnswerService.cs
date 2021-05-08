@@ -1,14 +1,12 @@
-﻿namespace Quiz.Services
+﻿using Quiz.Data;
+using Quiz.Models;
+using Quiz.Services.Models;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+
+namespace Quiz.Services
 {
-    using System.Linq;
-    using System.Collections.Generic;
-    using Microsoft.EntityFrameworkCore;
-
-    using Quiz.Data;
-    using Quiz.Models;
-    using Quiz.Services.Contracts;
-    using Quiz.Services.Models;
-
     public class UserAnswerService : IUserAnswerService
     {
         private readonly ApplicationDbContext applicationDbContext;
@@ -17,17 +15,16 @@
         {
             this.applicationDbContext = applicationDbContext;
         }
-        public void AddUserAnswer(string userId, int quizId, int questionId, int answerId)
+
+        public void AddUserAnswer(string userId, int answerId)
         {
             var userAnswer = new UserAnswer
             {
                 IdentityUserId = userId,
-                QuizId = quizId,
-                QuestionId = questionId,
                 AnswerId = answerId
             };
 
-            this.applicationDbContext.UsersAnswers.Add(userAnswer);
+            this.applicationDbContext.UserAnswers.Add(userAnswer);
             this.applicationDbContext.SaveChanges();
         }
 
@@ -35,14 +32,13 @@
         {
             var userAnswers = new List<UserAnswer>();
 
-            foreach (var question in quizInputModel.Questions)
+            foreach (var item in quizInputModel.Questions)
             {
                 var userAnswer = new UserAnswer
                 {
                     IdentityUserId = quizInputModel.UserId,
-                    QuizId = quizInputModel.QuizId,
-                    AnswerId = question.AnswerId,
-                    QuestionId = question.QuestionId
+                    AnswerId = item.AnswerId,
+                    QuestionId = item.QuestionId
                 };
 
                 userAnswers.Add(userAnswer);
@@ -52,30 +48,13 @@
             this.applicationDbContext.SaveChanges();
         }
 
-        public int GetUserResult(string userID, int quizId)
+        public int GetUserResult(string userId, int quizId)
         {
-            var originalQuiz = this.applicationDbContext
-                .Quizzes
-                .Include(x=>x.Qestions)
-                .ThenInclude(x=>x.Answers)
-                .FirstOrDefault(x => x.Id == quizId);
+            var totalPoints = this.applicationDbContext.UserAnswers
+                .Where(x=>x.IdentityUserId  == userId && x.Question.QuizId == quizId)
+                .Sum(x => x.Answer.Points);
 
-            var userAnswers = this.applicationDbContext.UsersAnswers
-                .Where(x => x.IdentityUserId == userID && x.QuizId == quizId)
-                .ToList();
-
-            int? totalPoints = 0;
-
-            foreach (var userAnswer in userAnswers)
-            {
-                totalPoints += originalQuiz.Qestions
-                    .FirstOrDefault(x => x.Id == userAnswer.QuestionId)
-                    .Answers
-                    .Where(x => x.IsCorrect)
-                    .FirstOrDefault(x => x.Id == userAnswer.AnswerId)
-                    ?.Points;
-            }
-            return totalPoints.GetValueOrDefault();
+            return totalPoints;
         }
     }
 }

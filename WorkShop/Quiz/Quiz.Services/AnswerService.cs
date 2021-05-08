@@ -1,8 +1,8 @@
-﻿namespace Quiz.Services
+﻿using Quiz.Data;
+using Quiz.Models;
+
+namespace Quiz.Services
 {
-    using Quiz.Data;
-    using Quiz.Models;
-    using Quiz.Services.Contracts;
     public class AnswerService : IAnswerService
     {
         private readonly ApplicationDbContext applicationDbContext;
@@ -11,14 +11,15 @@
         {
             this.applicationDbContext = applicationDbContext;
         }
-        public int Add(string title, int point, bool isCorrect, int questionId)
+
+        public int Add(string title, int points, bool isCorrect, int questionId)
         {
             var answer = new Answer
             {
                 Title = title,
-                Points = point,
+                Points = points,
                 IsCorrect = isCorrect,
-                QuestionId = questionId      
+                QuestionId = questionId
             };
 
             this.applicationDbContext.Answers.Add(answer);

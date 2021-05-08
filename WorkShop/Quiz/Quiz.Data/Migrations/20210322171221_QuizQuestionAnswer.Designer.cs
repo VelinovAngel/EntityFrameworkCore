@@ -10,15 +10,15 @@ using Quiz.Data;
 namespace Quiz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210416214448_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20210322171221_QuizQuestionAnswer")]
+    partial class QuizQuestionAnswer
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.5")
+                .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -224,7 +224,7 @@ namespace Quiz.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("IsCorrect")
+                    b.Property<bool>("IsCorrent")
                         .HasColumnType("bit");
 
                     b.Property<int>("Points")
@@ -253,7 +253,7 @@ namespace Quiz.Data.Migrations
                     b.Property<int?>("QuizId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Titile")
+                    b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -270,12 +270,12 @@ namespace Quiz.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Titile")
+                    b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Quizzes");
+                    b.ToTable("Quizes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -339,7 +339,7 @@ namespace Quiz.Data.Migrations
             modelBuilder.Entity("Quiz.Models.Question", b =>
                 {
                     b.HasOne("Quiz.Models.Quiz", null)
-                        .WithMany("Qestions")
+                        .WithMany("Questions")
                         .HasForeignKey("QuizId");
                 });
 
@@ -350,7 +350,7 @@ namespace Quiz.Data.Migrations
 
             modelBuilder.Entity("Quiz.Models.Quiz", b =>
                 {
-                    b.Navigation("Qestions");
+                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }

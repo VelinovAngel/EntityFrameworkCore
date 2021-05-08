@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Quiz.Services;
 using Microsoft.AspNetCore.Mvc;
-using Quiz.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Quiz.Web.Controllers
 {
